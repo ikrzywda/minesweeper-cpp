@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(cpp_2023_lab_01)
+project(minesweeper)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -29,4 +29,4 @@ add_compile_options ( -Wuninitialized )
 
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(cpp_2023_lab_01 ${SOURCES} main.cpp)
+add_executable(minesweeper ${SOURCES} main.cpp)

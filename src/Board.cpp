@@ -1,8 +1,9 @@
 #include "include/Board.hpp"
 
-Board::Board(int width, int height) {
+Board::Board(int width, int height, GameMode game_mode) {
   this->width = width;
   this->height = height;
+  this->game_mode = game_mode;
   this->board = std::vector<Field>(width * height, Field());
 }
 
@@ -16,9 +17,8 @@ void Board::debug_display() const {
     std::cout << i << std::setw(5);
   }
 
-
   for (auto field : this->board) {
-    
+
     current_field_str = field.get_display_str();
 
     if (!(col % this->width)) {
@@ -35,7 +35,7 @@ int Board::set_field(int x, int y, Field value) {
   if (this->board.size() < index) {
     return 0;
   }
-  
+
   this->board.at(index) = value;
   return 1;
 }
