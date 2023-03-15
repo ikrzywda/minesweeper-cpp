@@ -2,24 +2,9 @@
 
 #include "src/include/Board.hpp"
 
-Board board_fixture() {
-  int width = 10, height = 10;
-  Board fixture(width, height, DEBUG);
-
-  for (int i = 0; i < height; ++i) {
-    for (int j = 0; j < width; ++j) {
-      fixture.set_field(i, j,
-                        Field(std::rand() > RAND_MAX / 2,
-                              std::rand() > RAND_MAX / 2,
-                              std::rand() > RAND_MAX / 2));
-    }
-  }
-
-  return fixture;
-}
-
 int main() {
-  Board board = board_fixture();
+  Board board(10, 10, NORMAL);
   board.debug_display();
+  std::cout << "\n MINE COUNT: " << board.get_mine_count() << '\n';
   return 0;
 }
