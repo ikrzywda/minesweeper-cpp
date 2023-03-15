@@ -10,7 +10,7 @@ Board::Board(int width, int height, GameMode game_mode) {
   this->game_mode = game_mode;
   this->board = std::vector<Field>(width * height, Field());
   this->game_state = RUNNING;
-  
+
   int mine_count;
   int field_index;
 
@@ -24,7 +24,7 @@ Board::Board(int width, int height, GameMode game_mode) {
 
   mine_count = this->board.size() / game_mode;
 
-  for (int i = 0; i < mine_count; ) {
+  for (int i = 0; i < mine_count;) {
     field_index = rand() % this->board.size();
 
     if (this->board.at(field_index).has_mine) {
@@ -91,17 +91,17 @@ int Board::count_mines(int row, int col) const {
     return -1;
   }
 
-  unsigned long adjacent_indeces[9] = {
+  unsigned long adjacent_indeces[8] = {
       get_field_index(row + 1, col - 1), get_field_index(row + 1, col),
       get_field_index(row + 1, col + 1), get_field_index(row, col + 1),
-      get_field_index(row, col + 1),     get_field_index(row - 1, col - 1),
-      get_field_index(row - 1, col),     get_field_index(row - 1, col + 1),
+      get_field_index(row - 1, col - 1), get_field_index(row - 1, col),
+      get_field_index(row - 1, col + 1), get_field_index(row, col - 1),
   };
   int mine_count = 0;
 
   for (auto i : adjacent_indeces) {
 
-    if (i < 0 || i > this->board.size()) {
+    if (i < 0 || i >= this->board.size()) {
       continue;
     }
 
@@ -158,3 +158,5 @@ void Board::reveal_field(int row, int col) {
     this->board.at(field_index) = field;
   }
 }
+
+GameState Board::get_game_state() const { return this->game_state; }
