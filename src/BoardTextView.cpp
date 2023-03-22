@@ -1,4 +1,4 @@
-#include "include/BoardTextDisplay.hpp"
+#include "include/BoardTextView.hpp"
 
 BoardTextView::BoardTextView(std::shared_ptr<Board> board) {
   this->board = board;

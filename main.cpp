@@ -1,7 +1,7 @@
 #include <cstdlib>
 
 #include "src/include/Board.hpp"
-#include "src/include/BoardTextDisplay.hpp"
+#include "src/include/BoardTextView.hpp"
 
 int main() {
   auto board_ref = std::make_shared<Board>(Board(10, 10, DEBUG));
