@@ -159,4 +159,8 @@ void Board::reveal_field(int row, int col) {
   }
 }
 
+const std::vector<Field> &Board::get_board() const { return board; }
+
 GameState Board::get_game_state() const { return this->game_state; }
+
+GameMode Board::get_game_mode() const { return this->game_mode; }
