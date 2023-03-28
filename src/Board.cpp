@@ -191,31 +191,8 @@ void Board::reveal_field(int row, int col) {
 }
 
 int Board::reveal_adjacent_fields(unsigned long field_index) {
-  std::vector<unsigned long> adjacent_indices(8);
-
-  if (field_index < 0 || field_index >= this->board.size()) {
-    return 0;
-  }
-
-  if (this->board.at(field_index).mine_count > 0 ||
-      this->board.at(field_index).has_mine) {
-    this->board.at(field_index).is_revealed = true;
-    return 1;
-  }
-
-  std::cout << this->board.at(field_index).get_debug_str() << "BEFORE"
-            << std::endl;
-  this->board.at(field_index).is_revealed = true;
-  std::cout << this->board.at(field_index).get_debug_str() << "AFTER"
-            << std::endl;
-
-  if (!this->get_adjacent_field_indices(field_index, adjacent_indices)) {
-    return 0;
-  }
-
-  for (auto adjacent_index : adjacent_indices) {
-    this->reveal_adjacent_fields(adjacent_index);
-  }
+  flood_fill(this->board, this->width, this->height, uncover_field_predicate,
+             Field(false, false, true), field_index);
 
   return 1;
 }

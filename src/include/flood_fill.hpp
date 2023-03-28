@@ -4,56 +4,58 @@
 #include <stdexcept>
 #include <vector>
 
-template <typename T> struct FillData {
+template <typename T, typename Predicate> struct FillData {
   std::vector<T> &board;
-  const std::vector<T> &overridable_values;
+  Predicate field_validity_predicate;
   const T overriding_value;
   int width, height;
 };
 
-template <typename T>
-bool is_field_valid(unsigned long index, const FillData<T> &data) {
-  T current_field;
+template <typename T, typename Predicate>
+bool is_field_valid(unsigned long index, const FillData<T, Predicate> &data) {
 
   if (index >= data.board.size() || index < 0) {
     return false;
   }
-
-  current_field = data.board.at(index);
-
-  return current_field != data.overriding_value &&
-         std::find(data.overridable_values.begin(),
-                   data.overridable_values.end(),
-                   current_field) != data.overridable_values.end();
+  return data.field_validity_predicate(data.board.at(index));
 }
 
-template <typename T>
+template <typename T, typename Predicate>
 void get_adjacent_indices(unsigned long index,
                           std::vector<unsigned long> &adjacent_indices,
-                          const FillData<T> &data) {
+                          const FillData<T, Predicate> &data) {
   adjacent_indices.clear();
   adjacent_indices.push_back(index - data.width);
   adjacent_indices.push_back(index + data.width);
-  adjacent_indices.push_back(index - 1);
-  adjacent_indices.push_back(index + 1);
+
+  // validate that column offset does not overflow to different row
+  if (index % data.width != 0) {
+    adjacent_indices.push_back(index - 1);
+  }
+  if (index % data.width != 1) {
+    adjacent_indices.push_back(index + 1);
+  }
 }
 
-template <typename T>
+template <typename T, typename Predicate>
 void flood_fill(std::vector<T> &board, int width, int height,
-                const std::vector<T> &overridable_values, T overriding_value,
+                Predicate field_validity_predicate, T overriding_value,
                 unsigned long start_index) {
 
-  FillData<T> fill_data = {board, overridable_values, overriding_value, width,
-                           height};
+  FillData<T, Predicate> fill_data = {
+      board, field_validity_predicate, overriding_value, width, height,
+  };
 
   std::vector<unsigned long> check_stack(128);
   std::vector<unsigned long> adjacent_indices(4);
+
   unsigned long current_index;
 
   if (board.size() < start_index) {
     return;
   }
 
+  board.at(start_index) = overriding_value;
   check_stack.push_back(start_index);
 
   while (!check_stack.empty()) {
