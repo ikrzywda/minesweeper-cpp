@@ -67,7 +67,7 @@ Board::Board(int width, int height, GameMode game_mode) {
   this->board = std::vector<Field>(width * height, Field());
   this->game_state = RUNNING;
 
-  this->populate_board_debug();
+  this->populate_board(100);
   this->eager_compute_mine_count();
 }
 
@@ -147,6 +147,22 @@ int Board::count_mines(unsigned long field_index) const {
 
                            return sum;
                          });
+}
+
+void Board::evaluate_score() {
+  int uncovered_field_count =
+      this->board.size() - std::accumulate(std::begin(this->board),
+                                           std::end(this->board), 0,
+                                           [&](auto sum, auto field) {
+                                             if (field.is_revealed) {
+                                               return sum + 1;
+                                             }
+                                             return sum;
+                                           });
+  if (uncovered_field_count == this->game_mode) {
+    this->game_state = FINISHED_WIN;
+    emit_game_state_updated();
+  }
 }
 
 bool Board::has_flag(unsigned long field_index) const {

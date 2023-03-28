@@ -32,6 +32,7 @@ class Board {
   int get_adjacent_field_indices(
       unsigned long field_index,
       std::vector<unsigned long> &adjacent_indices) const;
+  void evaluate_score();
   void populate_board_debug();
   void populate_board(int mine_count);
   void eager_compute_mine_count();
