@@ -17,12 +17,7 @@ std::string TextView::field_to_str(Field field) {
   }
 }
 
-void TextView::draw() {
-  std::cout << "GAME MODE: "
-            << GameModeDescriptors.at(this->board.get_game_mode()) << '\n';
-  std::cout << "GAME MODE: "
-            << GameStateDescriptors.at(this->board.get_game_state()) << '\n';
-
+void TextView::game_view() {
   int row = 0, col = 0;
   std::string current_field_str;
   std::cout << "    ";
@@ -42,4 +37,36 @@ void TextView::draw() {
     std::cout << this->field_to_str(field) << std::setw(5);
     col++;
   }
+  std::cout << "\n\n";
+}
+
+void TextView::input_view() {
+  int row, col;
+  std::string action;
+
+  std::cout << "Enter row: ";
+  std::cin >> row;
+  std::cout << "Enter col: ";
+  std::cin >> col;
+  std::cout << "Enter action: ";
+  std::cin >> action;
+
+  if (action == "r") {
+    this->controller.reveal_field(row, col);
+  } else if (action == "f") {
+    this->controller.flag_field(row, col);
+  }
+}
+
+void TextView::conclusion_view(GameState game_state) {
+  std::cout << "Game over!\n";
+  std::cout << "You " << (game_state == FINISHED_WIN ? "won" : "lost") << "!\n";
+}
+
+void TextView::run() {
+  while (this->board.get_game_state() == RUNNING) {
+    this->game_view();
+    this->input_view();
+  }
+  this->conclusion_view(this->board.get_game_state());
 }

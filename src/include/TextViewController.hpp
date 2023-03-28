@@ -2,15 +2,15 @@
 #define CONTROLLER_HPP
 
 #include "Board.hpp"
-#include "TextView.hpp"
 
 class TextViewController {
   Board &board;
-  TextView &view;
 
 public:
-  TextViewController(Board &board_ref, TextView &text_view_ref)
-      : board(board_ref), view(text_view_ref){};
+  TextViewController(Board &board_ref) : board(board_ref){};
+
+  void reveal_field(int row, int col);
+  void flag_field(int row, int col);
 };
 
 #endif

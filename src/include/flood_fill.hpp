@@ -4,27 +4,25 @@
 #include <stdexcept>
 #include <vector>
 
-template <typename T, typename Predicate, typename Mapping> struct FillData {
+template <typename T> struct FillData {
   std::vector<T> &board;
-  Predicate field_validity_predicate;
-  Mapping field_mapping;
+  std::function<bool(T &)> mutating_predicate;
   int width, height;
 };
 
-template <typename T, typename Predicate, typename Mapping>
-bool is_field_valid(unsigned long index,
-                    const FillData<T, Predicate, Mapping> &data) {
+template <typename T>
+bool is_field_valid(unsigned long index, const FillData<T> &data) {
 
   if (index >= data.board.size() || index < 0) {
     return false;
   }
-  return data.field_validity_predicate(data.board.at(index));
+  return data.mutating_predicate(data.board.at(index));
 }
 
-template <typename T, typename Predicate, typename Mapping>
+template <typename T>
 void get_adjacent_indices(unsigned long index,
                           std::vector<unsigned long> &adjacent_indices,
-                          const FillData<T, Predicate, Mapping> &data) {
+                          const FillData<T> &data) {
   adjacent_indices.clear();
   adjacent_indices.push_back(index - data.width);
   adjacent_indices.push_back(index + data.width);
@@ -38,13 +36,16 @@ void get_adjacent_indices(unsigned long index,
   }
 }
 
-template <typename T, typename Predicate, typename Mapping>
+template <typename T>
 void flood_fill(std::vector<T> &board, int width, int height,
-                Predicate field_validity_predicate, Mapping field_mapping,
+                std::function<bool(T &)> mutating_predicate,
                 unsigned long start_index) {
 
-  FillData<T, Predicate, Mapping> fill_data = {
-      board, field_validity_predicate, field_mapping, width, height,
+  FillData<T> fill_data = {
+      board,
+      mutating_predicate,
+      width,
+      height,
   };
 
   std::vector<unsigned long> check_stack(128);
@@ -56,7 +57,7 @@ void flood_fill(std::vector<T> &board, int width, int height,
     return;
   }
 
-  board.at(start_index) = field_mapping(board.at(start_index));
+  fill_data.mutating_predicate(board.at(start_index));
   check_stack.push_back(start_index);
 
   while (!check_stack.empty()) {
@@ -66,7 +67,6 @@ void flood_fill(std::vector<T> &board, int width, int height,
 
     for (auto index : adjacent_indices) {
       if (is_field_valid(index, fill_data)) {
-        board.at(index) = field_mapping(board.at(index));
         check_stack.push_back(index);
       }
     }

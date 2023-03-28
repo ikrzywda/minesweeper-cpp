@@ -7,11 +7,10 @@
 int main() {
   Board board(10, 10, DEBUG);
   board.debug_display();
-  board.reveal_field(6, 2);
-  std::cout << '\n';
-  board.debug_display();
-  TextView view(board);
-  view.draw();
+  TextViewController controller(board);
+  TextView view(board, controller);
+
+  view.run();
 
   return 0;
 }

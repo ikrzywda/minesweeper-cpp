@@ -1,6 +1,6 @@
 #include "include/Board.hpp"
 
-unsigned long Board::get_field_index(int row, int col) const {
+unsigned long Board::compute_field_index(int row, int col) const {
   return row * this->width + col;
 }
 
@@ -31,39 +31,32 @@ int Board::get_adjacent_field_indices(
   return 1;
 }
 
-void Board::populate_board() {
-  int mine_count;
-  int field_index;
+void Board::populate_board_debug() {
 
-  if (this->game_mode == DEBUG) {
-    for (int i = 0; i < height; ++i) {
-      this->set_field(i, 0, Field(true, false, false));
-      this->set_field(i, i, Field(true, false, false));
-    }
-    return;
+  for (int i = 0; i < height; ++i) {
+    this->set_field(i, 0, Field(true, false, false));
+    this->set_field(i, i, Field(true, false, false));
   }
+}
 
-  mine_count = this->board.size() / this->game_mode;
+void Board::populate_board(int mine_count) {
+  int field_index;
+  mine_count = this->board.size() / mine_count;
 
   for (int i = 0; i < mine_count;) {
     field_index = rand() % this->board.size();
-
     if (this->board.at(field_index).has_mine) {
       continue;
     }
-
     this->board.at(field_index).has_mine = true;
     i++;
   }
 }
 
 void Board::eager_compute_mine_count() {
-  for (int row = 0; row < this->height; row++) {
-    for (int col = 0; col < this->width; col++) {
-      if (!this->board.at(this->get_field_index(row, col)).has_mine) {
-        this->board.at(this->get_field_index(row, col)).mine_count =
-            this->count_mines(row, col);
-      }
+  for (int i = 0; i < this->board.size(); i++) {
+    if (!this->board.at(i).has_mine) {
+      this->board.at(i).mine_count = this->count_mines(i);
     }
   }
 }
@@ -71,12 +64,32 @@ void Board::eager_compute_mine_count() {
 Board::Board(int width, int height, GameMode game_mode) {
   this->width = width;
   this->height = height;
-  this->game_mode = game_mode;
   this->board = std::vector<Field>(width * height, Field());
   this->game_state = RUNNING;
 
-  this->populate_board();
+  this->populate_board_debug();
   this->eager_compute_mine_count();
+}
+
+void Board::subscribe_to_board_updated(std::function<void()> callback) {
+  this->board_updated_callbacks.push_back(callback);
+}
+
+void Board::subscribe_to_game_state_updated(
+    std::function<void(GameState)> callback) {
+  this->game_state_updated_callbacks.push_back(callback);
+}
+
+void Board::emit_board_updated() {
+  for (auto callback : this->board_updated_callbacks) {
+    callback();
+  }
+}
+
+void Board::emit_game_state_updated() {
+  for (auto callback : this->game_state_updated_callbacks) {
+    callback(this->game_state);
+  }
 }
 
 void Board::debug_display() const {
@@ -115,9 +128,8 @@ int Board::set_field(int x, int y, Field value) {
 int Board::get_width() const { return this->width; }
 int Board::get_height() const { return this->height; }
 
-int Board::count_mines(int row, int col) const {
+int Board::count_mines(unsigned long field_index) const {
 
-  unsigned long field_index = this->get_field_index(row, col);
   std::vector<unsigned long> adjacent_indices(8);
 
   if (!this->get_adjacent_field_indices(field_index, adjacent_indices)) {
@@ -137,36 +149,31 @@ int Board::count_mines(int row, int col) const {
                          });
 }
 
-bool Board::has_flag(int row, int col) const {
-  unsigned long field_index;
+bool Board::has_flag(unsigned long field_index) const {
 
-  if ((field_index = get_field_index(row, col)) < 0 ||
-      field_index > this->board.size()) {
+  if (field_index < 0 || field_index > this->board.size()) {
     return false;
   }
 
   return this->board.at(field_index).has_flag;
 }
 
-void Board::toggle_flag(int row, int col) {
-  unsigned long field_index;
+void Board::toggle_flag(unsigned long field_index) {
   bool flag_value;
 
-  if ((field_index = get_field_index(row, col)) < 0 ||
-      field_index > this->board.size()) {
+  if (field_index < 0 || field_index > this->board.size()) {
     return;
   }
 
   flag_value = this->board.at(field_index).has_flag;
   this->board.at(field_index).has_flag = flag_value ? false : flag_value;
+  this->emit_board_updated();
 }
 
-void Board::reveal_field(int row, int col) {
-  unsigned long field_index;
+void Board::reveal_field(unsigned long field_index) {
   Field field;
 
-  if ((field_index = get_field_index(row, col)) < 0 ||
-      field_index > this->board.size()) {
+  if (field_index < 0 || field_index > this->board.size()) {
     return;
   }
 
@@ -174,33 +181,37 @@ void Board::reveal_field(int row, int col) {
 
   if (field.is_revealed) {
     return;
-    if (field.has_mine) {
-      this->game_state = FINISHED_LOSS;
-      return;
-    }
+  }
+  if (field.has_mine) {
+    this->game_state = FINISHED_LOSS;
+    this->emit_game_state_updated();
+    return;
   }
   field.is_revealed = true;
   this->board.at(field_index) = field;
   this->reveal_adjacent_fields(field_index);
+  this->emit_board_updated();
 }
 
 int Board::reveal_adjacent_fields(unsigned long field_index) {
-  auto uncover_field_predicate = [](const Field &field) {
-    return field.is_revealed == false && field.has_mine == false;
+  std::function<bool(Field &)> mutating_predicate = [](Field &field) {
+    if (field.is_revealed || field.has_mine) {
+      return false;
+    }
+    if (field.mine_count > 0) {
+      field = Field(false, false, true, field.mine_count);
+      return false;
+    }
+    field.is_revealed = true;
+    return true;
   };
 
-  auto field_mapping = [](const Field &field) {
-    return Field(field.has_mine, field.has_flag, true, field.mine_count);
-  };
-
-  flood_fill(this->board, this->width, this->height, uncover_field_predicate,
-             field_mapping, field_index);
-
+  flood_fill(this->board, this->width, this->height, mutating_predicate,
+             field_index);
   return 1;
 }
 
 const std::vector<Field> &Board::get_board() const { return board; }
 
 GameState Board::get_game_state() const { return this->game_state; }
-
 GameMode Board::get_game_mode() const { return this->game_mode; }
