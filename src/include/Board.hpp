@@ -44,7 +44,6 @@ public:
 
   int get_width() const;
   int get_height() const;
-  int get_mine_count() const;
 
   int count_mines(int row, int col) const;
   bool has_flag(int row, int col) const;

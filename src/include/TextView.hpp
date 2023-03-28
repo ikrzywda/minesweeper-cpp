@@ -5,12 +5,12 @@
 
 #include <iostream>
 
-class BoardTextView {
-  std::shared_ptr<Board> board;
+class TextView {
+  Board &board;
   std::string field_to_str(Field field);
 
 public:
-  BoardTextView(std::shared_ptr<Board> board);
+  TextView(Board &board_ref) : board(board_ref){};
   void draw();
 };
 

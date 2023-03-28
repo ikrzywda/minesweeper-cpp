@@ -12,18 +12,22 @@ int Board::get_adjacent_field_indices(
     return 0;
   }
 
-  std::vector<unsigned long> adjacent_indices_tmp = {
-      field_index + 1,
-      field_index - 1,
-      field_index + this->width,
-      field_index - this->width,
-      field_index + this->width + 1,
-      field_index + this->width - 1,
-      field_index - this->width + 1,
-      field_index - this->width - 1};
+  adjacent_indices.clear();
+  if (field_index % this->width != 0) {
+    adjacent_indices.push_back(field_index - 1);
+    adjacent_indices.push_back(field_index + this->width - 1);
+    adjacent_indices.push_back(field_index - this->width - 1);
+  }
 
-  adjacent_indices.assign(adjacent_indices_tmp.begin(),
-                          adjacent_indices_tmp.end());
+  if (field_index % this->width != 1) {
+    adjacent_indices.push_back(field_index + 1);
+    adjacent_indices.push_back(field_index + this->width + 1);
+    adjacent_indices.push_back(field_index - this->width + 1);
+  }
+
+  adjacent_indices.push_back(field_index + this->width);
+  adjacent_indices.push_back(field_index - this->width);
+
   return 1;
 }
 
@@ -110,16 +114,6 @@ int Board::set_field(int x, int y, Field value) {
 
 int Board::get_width() const { return this->width; }
 int Board::get_height() const { return this->height; }
-int Board::get_mine_count() const {
-  int mine_count = 0;
-
-  for (auto field : this->board) {
-    if (field.has_mine) {
-      mine_count++;
-    }
-  }
-  return mine_count;
-}
 
 int Board::count_mines(int row, int col) const {
 
