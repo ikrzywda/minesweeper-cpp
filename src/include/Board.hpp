@@ -5,7 +5,9 @@
 
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <map>
+#include <numeric>
 #include <vector>
 
 enum GameMode { DEBUG = 2, EASY = 1, NORMAL = 5, HARD = 3 };
@@ -27,6 +29,12 @@ class Board {
   GameState game_state;
 
   unsigned long get_field_index(int row, int col) const;
+  int get_adjacent_field_indices(
+      unsigned long field_index,
+      std::vector<unsigned long> &adjacent_indices) const;
+  void populate_board();
+  void eager_compute_mine_count();
+  int reveal_adjacent_fields(unsigned long field_index);
 
 public:
   Board(int width, int height, GameMode game_mode);

@@ -12,10 +12,21 @@ Field::Field() {
   this->is_revealed = false;
 }
 
-std::string Field::get_display_str() {
+std::string Field::get_debug_str() {
   std::string flag_mine = this->has_mine ? "M" : ".";
   std::string has_flag = this->has_flag ? "f" : ".";
   std::string is_revealed = this->is_revealed ? "r" : ".";
 
-  return "[" + flag_mine + has_flag + is_revealed + "]";
+  return "[" + flag_mine + has_flag + is_revealed +
+         std::to_string(this->mine_count) + "]";
+}
+
+std::string Field::get_display_str() {
+  if (this->has_mine) {
+    return "x";
+  } else if (this->has_flag) {
+    return "l";
+  } else {
+    return "o";
+  }
 }
