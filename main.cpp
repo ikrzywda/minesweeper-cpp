@@ -11,6 +11,7 @@ int main() {
   std::cout << '\n';
   board_ref->debug_display();
   BoardTextView view(board_ref);
+  view.draw();
 
   return 0;
 }

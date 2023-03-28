@@ -11,6 +11,7 @@ struct Field {
   int mine_count = 0;
 
   Field(bool has_mine, bool has_flag, bool is_revealed);
+  Field(bool has_mine, bool has_flag, bool is_revealed, int mine_count);
   Field();
 
   std::string get_debug_str();

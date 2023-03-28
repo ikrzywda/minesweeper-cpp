@@ -11,11 +11,6 @@
 #include <numeric>
 #include <vector>
 
-auto uncover_field_predicate = [](const Field &field) {
-  return field.is_revealed == false && field.has_mine == false &&
-         field.mine_count == 0;
-};
-
 enum GameMode { DEBUG = 2, EASY = 1, NORMAL = 5, HARD = 3 };
 enum GameState { RUNNING, FINISHED_WIN, FINISHED_LOSS };
 

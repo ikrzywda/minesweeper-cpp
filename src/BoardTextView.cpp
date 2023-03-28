@@ -1,5 +1,22 @@
 #include "include/BoardTextView.hpp"
 
+std::string BoardTextView::field_to_str(Field field) {
+  if (!field.is_revealed) {
+    return "#";
+  } else if (field.mine_count == 0) {
+    return "o";
+  } else {
+    return std::to_string(field.mine_count);
+  }
+
+  if (field.has_mine) {
+    return "x";
+  }
+  if (field.has_flag) {
+    return "l";
+  }
+}
+
 BoardTextView::BoardTextView(std::shared_ptr<Board> board) {
   this->board = board;
 }
@@ -21,13 +38,12 @@ void BoardTextView::draw() {
   }
 
   for (auto field : game_board) {
-    current_field_str = field.get_display_str();
 
     if (!(col % this->board->get_width())) {
       std::cout << '\n';
       std::cout << row++ << std::setw(4);
     }
-    std::cout << current_field_str << std::setw(5);
+    std::cout << this->field_to_str(field) << std::setw(5);
     col++;
   }
 }

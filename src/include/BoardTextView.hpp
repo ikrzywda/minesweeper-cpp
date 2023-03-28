@@ -7,6 +7,7 @@
 
 class BoardTextView {
   std::shared_ptr<Board> board;
+  std::string field_to_str(Field field);
 
 public:
   BoardTextView(std::shared_ptr<Board> board);

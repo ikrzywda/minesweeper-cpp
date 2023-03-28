@@ -191,8 +191,16 @@ void Board::reveal_field(int row, int col) {
 }
 
 int Board::reveal_adjacent_fields(unsigned long field_index) {
+  auto uncover_field_predicate = [](const Field &field) {
+    return field.is_revealed == false && field.has_mine == false;
+  };
+
+  auto field_mapping = [](const Field &field) {
+    return Field(field.has_mine, field.has_flag, true, field.mine_count);
+  };
+
   flood_fill(this->board, this->width, this->height, uncover_field_predicate,
-             Field(false, false, true), field_index);
+             field_mapping, field_index);
 
   return 1;
 }
