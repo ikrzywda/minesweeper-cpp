@@ -23,15 +23,16 @@ template <typename T>
 void get_adjacent_indices(unsigned long index,
                           std::vector<unsigned long> &adjacent_indices,
                           const FillData<T> &data) {
+  unsigned long current_row = index / data.width;
   adjacent_indices.clear();
   adjacent_indices.push_back(index - data.width);
   adjacent_indices.push_back(index + data.width);
 
   // validate that column offset does not overflow to different row
-  if (index % data.width != 0) {
+  if ((index - 1) / data.width == current_row) {
     adjacent_indices.push_back(index - 1);
   }
-  if (index % data.width != 1) {
+  if ((index + 1) / data.width == current_row) {
     adjacent_indices.push_back(index + 1);
   }
 }

@@ -36,6 +36,7 @@ void Board::populate_board_debug() {
   for (int i = 0; i < height; ++i) {
     this->set_field(i, 0, Field(true, false, false));
     this->set_field(i, i, Field(true, false, false));
+    this->mine_count += 2;
   }
 }
 
@@ -49,6 +50,7 @@ void Board::populate_board(int mine_count) {
       continue;
     }
     this->board.at(field_index).has_mine = true;
+    this->mine_count++;
     i++;
   }
 }
@@ -66,8 +68,15 @@ Board::Board(int width, int height, GameMode game_mode) {
   this->height = height;
   this->board = std::vector<Field>(width * height, Field());
   this->game_state = RUNNING;
+  this->game_mode = game_mode;
+  this->mine_count = 0;
 
-  this->populate_board(100);
+  if (game_mode == DEBUG) {
+    this->populate_board_debug();
+    return;
+  } else {
+    this->populate_board(game_mode);
+  }
   this->eager_compute_mine_count();
 }
 
@@ -159,9 +168,12 @@ void Board::evaluate_score() {
                                              }
                                              return sum;
                                            });
-  if (uncovered_field_count == this->game_mode) {
+  std::cout << "uncovered_field_count: " << uncovered_field_count
+            << "game mode: " << this->game_mode << '\n';
+  if (uncovered_field_count == this->mine_count) {
     this->game_state = FINISHED_WIN;
-    emit_game_state_updated();
+    std::cout << "emmiting" << '\n';
+    this->emit_game_state_updated();
   }
 }
 
@@ -207,6 +219,7 @@ void Board::reveal_field(unsigned long field_index) {
   this->board.at(field_index) = field;
   this->reveal_adjacent_fields(field_index);
   this->emit_board_updated();
+  this->evaluate_score();
 }
 
 int Board::reveal_adjacent_fields(unsigned long field_index) {

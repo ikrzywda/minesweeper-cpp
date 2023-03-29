@@ -11,7 +11,7 @@
 #include <numeric>
 #include <vector>
 
-enum GameMode { DEBUG = 2, EASY = 1, NORMAL = 5, HARD = 3 };
+enum GameMode { DEBUG = 2, EASY = 100, NORMAL = 5, HARD = 3 };
 enum GameState { RUNNING, FINISHED_WIN, FINISHED_LOSS };
 
 const std::map<int, std::string> GameModeDescriptors = {
@@ -25,6 +25,7 @@ const std::map<int, std::string> GameStateDescriptors = {
 class Board {
   int width;
   int height;
+  int mine_count;
   std::vector<Field> board;
   GameMode game_mode;
   GameState game_state;
