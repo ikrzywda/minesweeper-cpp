@@ -1,5 +1,3 @@
-#include <cstdlib>
-
 #include "src/include/Board.hpp"
 #include "src/include/TextView.hpp"
 #include "src/include/flood_fill.hpp"

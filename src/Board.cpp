@@ -8,18 +8,19 @@ int Board::get_adjacent_field_indices(
     unsigned long field_index,
     std::vector<unsigned long> &adjacent_indices) const {
 
+  unsigned long current_row = field_index / this->width;
   if (field_index < 0 || field_index > this->board.size()) {
     return 0;
   }
 
   adjacent_indices.clear();
-  if (field_index % this->width != 0) {
+  if ((field_index - 1) / this->width == current_row) {
     adjacent_indices.push_back(field_index - 1);
     adjacent_indices.push_back(field_index + this->width - 1);
     adjacent_indices.push_back(field_index - this->width - 1);
   }
 
-  if (field_index % this->width != 1) {
+  if ((field_index + 1) / this->width == current_row) {
     adjacent_indices.push_back(field_index + 1);
     adjacent_indices.push_back(field_index + this->width + 1);
     adjacent_indices.push_back(field_index - this->width + 1);
@@ -73,7 +74,6 @@ Board::Board(int width, int height, GameMode game_mode) {
 
   if (game_mode == DEBUG) {
     this->populate_board_debug();
-    return;
   } else {
     this->populate_board(game_mode);
   }
@@ -187,14 +187,12 @@ bool Board::has_flag(unsigned long field_index) const {
 }
 
 void Board::toggle_flag(unsigned long field_index) {
-  bool flag_value;
 
   if (field_index < 0 || field_index > this->board.size()) {
     return;
   }
 
-  flag_value = this->board.at(field_index).has_flag;
-  this->board.at(field_index).has_flag = flag_value ? false : flag_value;
+  this->board.at(field_index).has_flag = !this->board.at(field_index).has_flag;
   this->emit_board_updated();
 }
 

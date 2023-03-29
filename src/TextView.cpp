@@ -2,7 +2,7 @@
 
 std::string TextView::field_to_str(Field field) {
   if (!field.is_revealed) {
-    return "#";
+    return field.has_flag ? "l" : "#";
   } else if (field.mine_count == 0) {
     return "o";
   } else {
@@ -11,9 +11,6 @@ std::string TextView::field_to_str(Field field) {
 
   if (field.has_mine) {
     return "x";
-  }
-  if (field.has_flag) {
-    return "l";
   }
 }
 
