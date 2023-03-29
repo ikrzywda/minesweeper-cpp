@@ -1,14 +1,24 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.0)
 project(minesweeper)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+
+
+set(SFML_INCLUDE_DIR "/usr/local/include")
+set(SFML_LIBRARY_DIR "/usr/local/lib")
+
+link_directories(${SFML_LIBRARY_DIR})
+include_directories(${SFML_INCLUDE_DIR})
+
+find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
 
 
 # tego brakuje !! To są opcje, których ja sam używam w moich programach
 # te opcje muszą być ZAWSZE włączone
 add_compile_options(-Wall -Wextra)
+
 
 # chcemy, by nasz kod był w pełni zgodny ze standardem
 add_compile_options(-pedantic)
@@ -33,6 +43,8 @@ add_compile_options ( -Wuninitialized )
 file(GLOB SOURCES "src/*.cpp")
 
 add_executable(minesweeper ${SOURCES} main.cpp)
+
+target_link_libraries (minesweeper sfml-graphics sfml-window sfml-system)
 
 
 
