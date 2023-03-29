@@ -12,7 +12,7 @@
 #include <vector>
 
 enum GameMode { DEBUG = 2, EASY = 100, NORMAL = 5, HARD = 3 };
-enum GameState { RUNNING, FINISHED_WIN, FINISHED_LOSS };
+enum GameState { UNKNOWN, RUNNING, FINISHED_WIN, FINISHED_LOSS };
 
 const std::map<int, std::string> GameModeDescriptors = {
     {DEBUG, "debug"}, {EASY, "easy"}, {NORMAL, "normal"}, {HARD, "hard"}};
@@ -53,6 +53,7 @@ public:
   void subscribe_to_game_state_updated(std::function<void(GameState)> callback);
 
   void debug_display() const;
+  void start_game();
   int set_field(int x, int y, Field value);
 
   int get_width() const;

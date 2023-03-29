@@ -1,6 +1,6 @@
 #include "src/include/Board.hpp"
 #include "src/include/TextView.hpp"
-#include "src/include/flood_fill.hpp"
+#include "src/include/TextViewController.hpp"
 
 int main() {
   Board board(10, 10, DEBUG);
@@ -8,7 +8,7 @@ int main() {
   TextViewController controller(board);
   TextView view(board, controller);
 
-  view.run();
+  controller.run();
 
   return 0;
 }

@@ -68,7 +68,7 @@ Board::Board(int width, int height, GameMode game_mode) {
   this->width = width;
   this->height = height;
   this->board = std::vector<Field>(width * height, Field());
-  this->game_state = RUNNING;
+  this->game_state = UNKNOWN;
   this->game_mode = game_mode;
   this->mine_count = 0;
 
@@ -124,6 +124,11 @@ void Board::debug_display() const {
   }
 }
 
+void Board::start_game() {
+  this->game_state = RUNNING;
+  this->emit_game_state_updated();
+}
+
 int Board::set_field(int x, int y, Field value) {
   unsigned long index = x + this->width * y;
   if (this->board.size() < index) {
@@ -168,11 +173,8 @@ void Board::evaluate_score() {
                                              }
                                              return sum;
                                            });
-  std::cout << "uncovered_field_count: " << uncovered_field_count
-            << "game mode: " << this->game_mode << '\n';
   if (uncovered_field_count == this->mine_count) {
     this->game_state = FINISHED_WIN;
-    std::cout << "emmiting" << '\n';
     this->emit_game_state_updated();
   }
 }

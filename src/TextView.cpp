@@ -15,6 +15,11 @@ std::string TextView::field_to_str(Field field) {
 }
 
 void TextView::game_view() {
+
+  if (this->board.get_game_state() != RUNNING) {
+    return;
+  }
+
   int row = 0, col = 0;
   std::string current_field_str;
   std::cout << "    ";
@@ -56,14 +61,9 @@ void TextView::input_view() {
 }
 
 void TextView::conclusion_view(GameState game_state) {
+  if (game_state == RUNNING) {
+    return;
+  }
   std::cout << "Game over!\n";
   std::cout << "You " << (game_state == FINISHED_WIN ? "won" : "lost") << "!\n";
-}
-
-void TextView::run() {
-  while (this->board.get_game_state() == RUNNING) {
-    this->game_view();
-    this->input_view();
-  }
-  this->conclusion_view(this->board.get_game_state());
 }

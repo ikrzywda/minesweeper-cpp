@@ -11,6 +11,7 @@ public:
 
   void reveal_field(int row, int col);
   void flag_field(int row, int col);
+  void run();
 };
 
 #endif
