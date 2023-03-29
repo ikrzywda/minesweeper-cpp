@@ -42,24 +42,6 @@ void TextView::game_view() {
   std::cout << "\n\n";
 }
 
-void TextView::input_view() {
-  int row, col;
-  std::string action;
-
-  std::cout << "Enter row: ";
-  std::cin >> row;
-  std::cout << "Enter col: ";
-  std::cin >> col;
-  std::cout << "Enter action: ";
-  std::cin >> action;
-
-  if (action == "r") {
-    this->controller.reveal_field(row, col);
-  } else if (action == "f") {
-    this->controller.flag_field(row, col);
-  }
-}
-
 void TextView::conclusion_view(GameState game_state) {
   if (game_state == RUNNING) {
     return;

@@ -13,7 +13,6 @@ class TextView {
   std::string field_to_str(Field field);
   void game_view();
   void conclusion_view(GameState game_state);
-  void input_view();
 
 public:
   TextView(Board &board_ref, TextViewController &controller_ref)
