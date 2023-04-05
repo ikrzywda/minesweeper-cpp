@@ -14,7 +14,7 @@ void GUIViewController::run() {
   board.start_game();
   while (board.get_game_state() == RUNNING) {
     sf::Event event;
-    board.set_mouse_position(sf::Mouse::getPosition(window));
+    board.set_mouse_position(sf::Mouse::getPosition(this->window));
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         window.close();

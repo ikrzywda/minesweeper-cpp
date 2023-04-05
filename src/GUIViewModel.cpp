@@ -12,6 +12,9 @@ void GUIViewModel::subscribe_to_mouse_position_updated(
 }
 
 void GUIViewModel::set_mouse_position(sf::Vector2i mouse_position) {
+  if (this->mouse_position == mouse_position) {
+    return;
+  }
   this->mouse_position = mouse_position;
   this->emit_mouse_position_updated();
 }
