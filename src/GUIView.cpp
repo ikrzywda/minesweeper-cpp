@@ -1,7 +1,6 @@
 #include "include/GUIView.hpp"
 
 sf::Color GUIView::get_color(Field field) {
-  std::cout << "green\n";
   if (!field.is_revealed) {
     return field.has_flag ? sf::Color::Red : sf::Color::White;
   } else if (field.mine_count == 0) {

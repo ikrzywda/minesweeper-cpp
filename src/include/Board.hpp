@@ -46,7 +46,7 @@ class Board {
   void emit_board_updated();
 
 public:
-  Board(int width, int height, GameMode game_mode);
+  explicit Board(int width, int height, GameMode game_mode);
   unsigned long compute_field_index(int row, int col) const;
 
   void subscribe_to_board_updated(std::function<void()> callback);
