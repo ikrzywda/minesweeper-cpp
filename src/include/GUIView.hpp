@@ -8,6 +8,7 @@
 class GUIView {
   sf::RenderWindow &window;
   Board &board;
+  sf::RectangleShape field_shape;
 
 public:
   GUIView(sf::RenderWindow &window_ref, Board &board_ref)

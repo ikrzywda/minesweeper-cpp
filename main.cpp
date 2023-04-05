@@ -13,6 +13,24 @@ int main() {
   GUIViewController controller(board, window);
   GUIView view(window, board);
 
-  controller.run();
+  // controller.run();
+  controller.reveal_field(6, 2);
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
+    view.game_view();
+  }
+  // view.game_view();
+
+  // Board board(10, 10, DEBUG);
+  // board.debug_display();
+  // TextViewController controller(board);
+  // TextView view(board, controller);
+
+  // controller.run();
   return 0;
 }
