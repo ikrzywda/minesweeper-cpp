@@ -12,9 +12,18 @@ void GUIViewController::flag_field(int row, int col) {
 
 void GUIViewController::run() {
   board.start_game();
+  unsigned long mouse_field_index;
+  sf::Event event;
   while (board.get_game_state() == RUNNING) {
     sf::Event event;
+
     board.set_mouse_position(sf::Mouse::getPosition(this->window));
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+      mouse_field_index = this->board.mouse_position.x / 50 +
+                          this->board.mouse_position.y / 50 * board.get_width();
+      reveal_field(mouse_field_index / board.get_width(),
+                   mouse_field_index % board.get_width());
+    }
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         window.close();
