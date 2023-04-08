@@ -1,10 +1,10 @@
+#include "src/include/AssetWrappers.hpp"
 #include "src/include/Board.hpp"
 #include "src/include/GUIView.hpp"
 #include "src/include/GUIViewController.hpp"
 #include "src/include/GUIViewModel.hpp"
 #include "src/include/TextView.hpp"
 #include "src/include/TextViewController.hpp"
-#include "src/include/AssetWrappers.hpp"
 
 #include <SFML/Graphics.hpp>
 
