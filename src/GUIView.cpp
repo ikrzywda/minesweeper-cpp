@@ -1,5 +1,15 @@
 #include "include/GUIView.hpp"
 
+const sf::Texture *GUIView::get_field_texture(Field field) {
+  sf::Sprite sprite;
+  if (!field.is_revealed) {
+    return field.has_flag ? &Assets::flag_texture : &Assets::covered;
+  } else if (field.has_mine) {
+    return &Assets::exploded_texture;
+  }
+  return &Assets::tile_textures[field.mine_count];
+}
+
 sf::Color GUIView::get_color(Field field) {
   if (!field.is_revealed) {
     return field.has_flag ? sf::Color::Red : sf::Color::White;
@@ -25,11 +35,7 @@ void GUIView::game_view() {
     sf::RectangleShape rect(sf::Vector2f(50, 50));
     rect.setPosition(sf::Vector2f((i % board.get_width()) * 50,
                                   (i / board.get_width()) * 50));
-    if (i == mouse_field_index) {
-      rect.setFillColor(sf::Color::Blue);
-    } else {
-      rect.setFillColor(this->get_color(game_board[i]));
-    }
+    rect.setTexture(this->get_field_texture(game_board[i]));
     window.draw(rect);
   }
   window.display();

@@ -1,6 +1,7 @@
 #ifndef GUI_VIEW_HPP
 #define GUI_VIEW_HPP
 
+#include "AssetWrappers.hpp"
 #include "GUIViewModel.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -12,6 +13,7 @@ class GUIView {
   void game_view();
   // void conclusion_view(GameState game_state);
   sf::Color get_color(Field field);
+  const sf::Texture *get_field_texture(Field field);
 
 public:
   GUIView(sf::RenderWindow &window_ref, GUIViewModel &board_ref)

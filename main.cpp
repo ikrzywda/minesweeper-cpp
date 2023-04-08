@@ -4,11 +4,13 @@
 #include "src/include/GUIViewModel.hpp"
 #include "src/include/TextView.hpp"
 #include "src/include/TextViewController.hpp"
+#include "src/include/AssetWrappers.hpp"
 
 #include <SFML/Graphics.hpp>
 
 int main() {
 
+  Assets::load_assets();
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(500, 500)), "SFML works!");
   GUIViewModel board(10, 10, DEBUG);
   GUIViewController controller(board, window);
