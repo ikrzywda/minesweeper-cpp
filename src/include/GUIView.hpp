@@ -10,6 +10,7 @@ class GUIView {
   sf::RenderWindow &window;
   GUIViewModel &board;
   sf::RectangleShape field_shape;
+  void menu_view();
   void game_view();
   // void conclusion_view(GameState game_state);
   sf::Color get_color(Field field);
