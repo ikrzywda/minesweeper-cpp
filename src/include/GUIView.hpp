@@ -11,8 +11,8 @@ class GUIView {
   GUIViewModel &board;
   sf::RectangleShape field_shape;
   void menu_view();
+  void conclusion_view(GameState game_state);
   void game_view();
-  // void conclusion_view(GameState game_state);
   sf::Color get_color(Field field);
   const sf::Texture *get_field_texture(Field field);
 

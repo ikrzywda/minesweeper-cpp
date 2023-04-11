@@ -24,6 +24,30 @@ sf::Color GUIView::get_color(Field field) {
   }
 }
 
+// void GUIView::conclusion_view(GameState game_state) {
+//   window.clear();
+//   sf::Text text;
+//   text.setFont(Assets::font);
+//   text.setCharacterSize(24);
+//   text.setFillColor(sf::Color::White);
+//   text.setPosition(100, 100);
+//   text.setString("You won!");
+//   window.draw(text);
+//   window.display();
+// }
+
+// void GUIView::menu_view() {
+//   window.clear();
+//   sf::Text text;
+//   text.setFont(Assets::font);
+//   text.setCharacterSize(24);
+//   text.setFillColor(sf::Color::White);
+//   text.setPosition(100, 100);
+//   text.setString("Welcome to Minesweeper!");
+//   window.draw(text);
+//   window.display();
+// }
+
 void GUIView::game_view() {
   const std::vector<Field> &game_board = this->board.get_board();
   unsigned long mouse_field_index =
