@@ -1,16 +1,16 @@
 #ifndef GUI_VIEW_CONTROLLER
 #define GUI_VIEW_CONTROLLER
 
-#include "Board.hpp"
+#include "GUIViewModel.hpp"
 
 #include <SFML/Graphics.hpp>
 
 class GUIViewController {
-  Board &board;
+  GUIViewModel &board;
   sf::RenderWindow &window;
 
 public:
-  GUIViewController(Board &board_ref, sf::RenderWindow &window_ref)
+  GUIViewController(GUIViewModel &board_ref, sf::RenderWindow &window_ref)
       : board(board_ref), window(window_ref){};
 
   void reveal_field(int row, int col);
