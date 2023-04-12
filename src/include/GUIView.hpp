@@ -33,6 +33,16 @@ public:
   virtual void draw(sf::RenderWindow &window) override;
 };
 
+class ConclusionView : public ButtonView {
+  std::function<void()> return_to_main_menu_callback;
+
+public:
+  explicit ConclusionView(sf::RenderWindow &window,
+                          std::function<void()> return_to_main_menu_callback);
+  virtual ~ConclusionView() = default;
+  virtual void draw(sf::RenderWindow &window) override;
+};
+
 enum View { MAIN_MENU, GAME, CONCLUSION };
 class GUIView {
 
@@ -66,6 +76,7 @@ public:
         break;
       }
       }
+      this->draw();
     });
     board.subscribe_to_board_updated([this]() { this->draw(); });
     board.subscribe_to_mouse_position_updated(

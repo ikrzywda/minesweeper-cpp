@@ -15,11 +15,7 @@ int main() {
   GUIViewModel board(10, 10, DEBUG);
   GUIViewController controller(board, window);
   MainMenuView main_menu_view(
-      window,
-      [&controller]() {
-        controller.start_game();
-        std::cout << "dupa" << std::endl;
-      },
+      window, [&controller]() { controller.start_game(); },
       [&window]() { window.close(); }, [](GameMode game_mode) {});
 
   GameView game_view(window, board, [&controller](unsigned long field_index) {

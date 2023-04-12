@@ -12,13 +12,8 @@ void GUIViewController::flag_field(int row, int col) {
 void GUIViewController::start_game() { board.start_game(); }
 
 void GUIViewController::run() {
-  board.start_game();
-  unsigned long mouse_field_index;
   sf::Event event;
   while (1) {
-    sf::Event event;
-
-    // board.set_mouse_position(sf::Mouse::getPosition(this->window));
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
       this->board.set_mouse_position(sf::Mouse::getPosition(this->window));
     }
