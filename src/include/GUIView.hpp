@@ -3,14 +3,31 @@
 
 #include "AssetWrappers.hpp"
 #include "GUIViewModel.hpp"
+#include "View.hpp"
 
 #include <SFML/Graphics.hpp>
+
+class MainMenuView : public ButtonView {
+  std::function<void()> on_start_game_callback;
+  std::function<void()> on_exit_callback;
+  std::function<void(GameMode)> on_difficulty_change_callback;
+  sf::Text menu_text;
+
+public:
+  explicit MainMenuView(
+      sf::RenderWindow &window, std::function<void()> on_start_game_callback,
+      std::function<void()> on_exit_callback,
+      std::function<void(GameMode)> on_difficulty_change_callbacks);
+  virtual ~MainMenuView() = default;
+  virtual void draw(sf::RenderWindow &window) override;
+};
 
 class GUIView {
   sf::RenderWindow &window;
   GUIViewModel &board;
   sf::RectangleShape field_shape;
-  void menu_view();
+
+  // MainMenuView &main_menu_view;
   void conclusion_view(GameState game_state);
   void game_view();
   sf::Color get_color(Field field);
