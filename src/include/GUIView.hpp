@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
+const sf::Texture *get_field_texture(Field field);
 class MainMenuView : public ButtonView {
   std::function<void()> on_start_game_callback;
   std::function<void()> on_exit_callback;
@@ -22,29 +23,68 @@ public:
   virtual void draw(sf::RenderWindow &window) override;
 };
 
+class GameView : public ButtonView {
+  Board &board;
+
+public:
+  GameView(sf::RenderWindow &window, Board &board_ref,
+           std::function<void(unsigned long)> on_field_click_callback);
+  virtual ~GameView() = default;
+  virtual void draw(sf::RenderWindow &window) override;
+};
+
+enum View { MAIN_MENU, GAME, CONCLUSION };
 class GUIView {
+
+  View current_view = MAIN_MENU;
   sf::RenderWindow &window;
   GUIViewModel &board;
   sf::RectangleShape field_shape;
 
-  // MainMenuView &main_menu_view;
-  void conclusion_view(GameState game_state);
-  void game_view();
-  sf::Color get_color(Field field);
-  const sf::Texture *get_field_texture(Field field);
+  MainMenuView &main_menu_view;
+  GameView &game_view;
+  void draw();
 
 public:
-  GUIView(sf::RenderWindow &window_ref, GUIViewModel &board_ref)
-      : window(window_ref), board(board_ref) {
-    board.subscribe_to_board_updated([this]() { this->game_view(); });
-    // board.subscribe_to_game_state_updated([this](GameState game_state) {
-    // this->conclusion_view(game_state);
-    // });
+  GUIView(sf::RenderWindow &window_ref, GUIViewModel &board_ref,
+          MainMenuView &main_menu_view_ref, GameView &game_view_ref)
+      : window(window_ref), board(board_ref),
+        main_menu_view(main_menu_view_ref), game_view(game_view_ref) {
+    board.subscribe_to_game_state_updated([this](GameState game_state) {
+      std::cout << "Game state updated" << std::endl;
+      switch (game_state) {
+      case UNKNOWN: {
+        this->current_view = MAIN_MENU;
+        break;
+      }
+      case RUNNING: {
+        this->current_view = GAME;
+        break;
+      }
+      default: {
+        this->current_view = MAIN_MENU;
+        break;
+      }
+      }
+    });
+    board.subscribe_to_board_updated([this]() { this->draw(); });
     board.subscribe_to_mouse_position_updated(
         [this](sf::Vector2i mouse_position) {
-          std::cout << mouse_position.x << " " << mouse_position.y << std::endl;
-          this->game_view(); // todo: change to generic view update
+          switch (this->current_view) {
+          case MAIN_MENU: {
+            this->main_menu_view.handle_click(sf::Vector2f(mouse_position));
+            break;
+          }
+          case GAME: {
+            this->game_view.handle_click(sf::Vector2f(mouse_position));
+            break;
+          }
+          case CONCLUSION: {
+            break;
+          }
+          }
         });
+    this->draw();
   };
 };
 

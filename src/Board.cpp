@@ -127,6 +127,7 @@ void Board::debug_display() const {
 void Board::start_game() {
   this->game_state = RUNNING;
   this->emit_game_state_updated();
+  std::cout << "Game started" << std::endl;
 }
 
 int Board::set_field(int x, int y, Field value) {

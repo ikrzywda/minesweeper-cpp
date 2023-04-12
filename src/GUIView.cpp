@@ -32,6 +32,7 @@ MainMenuView::MainMenuView(
   start_game_button.setPosition(sf::Vector2f(
       window.getSize().x / 2.0f - button_size.x / 2.0f,
       menu_text.getPosition().y + menu_text.getGlobalBounds().height + 50.0f));
+  start_game_button.setFillColor(sf::Color::Green);
 
   easy_button.setPosition(
       sf::Vector2f(start_game_button.getPosition().x - button_size.x - 25.0f,
@@ -65,7 +66,7 @@ void MainMenuView::draw(sf::RenderWindow &window) {
   window.display();
 }
 
-const sf::Texture *GUIView::get_field_texture(Field field) {
+const sf::Texture *get_field_texture(Field field) {
   sf::Sprite sprite;
   if (!field.is_revealed) {
     return field.has_flag ? &Assets::flag_texture : &Assets::covered;
@@ -75,33 +76,35 @@ const sf::Texture *GUIView::get_field_texture(Field field) {
   return &Assets::tile_textures[field.mine_count];
 }
 
-sf::Color GUIView::get_color(Field field) {
-  if (!field.is_revealed) {
-    return field.has_flag ? sf::Color::Red : sf::Color::White;
-  } else if (field.mine_count == 0) {
-    return sf::Color::Green;
-  } else {
-    return sf::Color::Yellow;
-  }
-
-  if (field.has_mine) {
-    return sf::Color::Black;
+GameView::GameView(sf::RenderWindow &window, Board &board_ref,
+                   std::function<void(unsigned long)> on_field_click_callback)
+    : board(board_ref) {
+  for (int i = 0; i < board.get_board().size(); ++i) {
+    Button button(sf::Vector2f(50, 50), [on_field_click_callback, i]() {
+      on_field_click_callback(i);
+    });
+    button.setPosition(sf::Vector2f((i % board.get_width()) * 50,
+                                    (i / board.get_width()) * 50));
+    this->buttons.push_back(button);
   }
 }
 
-void GUIView::game_view() {
-  const std::vector<Field> &game_board = this->board.get_board();
-  unsigned long mouse_field_index =
-      this->board.mouse_position.x / 50 +
-      this->board.mouse_position.y / 50 * board.get_width();
-
+void GameView::draw(sf::RenderWindow &window) {
   window.clear();
-  for (int i = 0; i < game_board.size(); ++i) {
-    sf::RectangleShape rect(sf::Vector2f(50, 50));
-    rect.setPosition(sf::Vector2f((i % board.get_width()) * 50,
-                                  (i / board.get_width()) * 50));
-    rect.setTexture(this->get_field_texture(game_board[i]));
-    window.draw(rect);
+  for (int i = 0; i < board.get_board().size(); ++i) {
+    this->buttons[i].setTexture(get_field_texture(board.get_board()[i]));
+    window.draw(this->buttons[i]);
   }
   window.display();
+}
+
+void GUIView::draw() {
+  switch (this->current_view) {
+  case MAIN_MENU:
+    this->main_menu_view.draw(this->window);
+    break;
+  case GAME:
+    this->game_view.draw(this->window);
+    break;
+  }
 }
