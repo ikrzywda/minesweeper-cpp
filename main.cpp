@@ -18,9 +18,14 @@ int main() {
       window, [&controller]() { controller.start_game(); },
       [&window]() { window.close(); }, [](GameMode game_mode) {});
 
-  GameView game_view(window, board, [&controller](unsigned long field_index) {
-    controller.reveal_field(field_index);
-  });
+  GameView game_view(
+      window, board,
+      [&controller](unsigned long field_index) {
+        controller.reveal_field(field_index);
+      },
+      [&controller](unsigned long field_index) {
+        controller.flag_field(field_index);
+      });
   GUIView view(window, board, main_menu_view, game_view);
 
   controller.run();

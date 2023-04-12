@@ -11,6 +11,7 @@ protected:
 public:
   virtual ~ButtonView() = default;
   void handle_click(sf::Vector2f pos);
+  void handle_right_click(sf::Vector2f pos);
   virtual void draw(sf::RenderWindow &window);
 };
 

@@ -8,18 +8,18 @@
 
 class GUIViewModel : public Board {
 
-  static std::vector<sf::Texture> textures;
-  std::vector<std::function<void(sf::Vector2i)>>
-      mouse_position_updated_callbacks;
+  std::vector<std::function<void(sf::Vector2i)>> left_mouse_click_callbacks;
 
-  void emit_mouse_position_updated();
+  std::vector<std::function<void(sf::Vector2i)>> right_mouse_click_callbacks;
 
 public:
   using Board::Board;
-  sf::Vector2i mouse_position;
-  void subscribe_to_mouse_position_updated(
-      std::function<void(sf::Vector2i)> callback);
-  void set_mouse_position(sf::Vector2i mouse_position);
+  void dispatch_left_mouse_click(sf::Vector2i mouse_position);
+  void dispatch_right_mouse_click(sf::Vector2i mouse_position);
+  void
+  subscribe_to_left_mouse_click(std::function<void(sf::Vector2i)> callback);
+  void
+  subscribe_to_right_mouse_click(std::function<void(sf::Vector2i)> callback);
 };
 
 #endif

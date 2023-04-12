@@ -1,22 +1,45 @@
 #include "include/GUIView.hpp"
 
+const sf::Texture *get_field_texture(Field field) {
+  sf::Sprite sprite;
+  if (!field.is_revealed) {
+    return field.has_flag ? &Assets::flag_texture : &Assets::covered;
+  } else if (field.has_mine) {
+    return &Assets::exploded_texture;
+  }
+  return &Assets::tile_textures[field.mine_count];
+}
+
 MainMenuView::MainMenuView(
     sf::RenderWindow &window, std::function<void()> on_start_game_callback,
     std::function<void()> on_exit_callback,
     std::function<void(GameMode)> on_difficulty_change_callbacks) {
-  Button start_game_button =
-      Button(sf::Vector2f(100, 50), on_start_game_callback);
-  Button exit_button = Button(sf::Vector2f(100, 50), on_exit_callback);
-  Button easy_button =
-      Button(sf::Vector2f(100, 50), [on_difficulty_change_callbacks]() {
+  Button start_game_button = Button(
+      sf::Vector2f(100, 50), on_start_game_callback, on_start_game_callback);
+  Button exit_button =
+      Button(sf::Vector2f(100, 50), on_exit_callback, on_exit_callback);
+  Button easy_button = Button(
+      sf::Vector2f(100, 50),
+      [on_difficulty_change_callbacks]() {
+        on_difficulty_change_callbacks(EASY);
+      },
+      [on_difficulty_change_callbacks]() {
         on_difficulty_change_callbacks(EASY);
       });
-  Button medium_button =
-      Button(sf::Vector2f(100, 50), [on_difficulty_change_callbacks]() {
+  Button medium_button = Button(
+      sf::Vector2f(100, 50),
+      [on_difficulty_change_callbacks]() {
+        on_difficulty_change_callbacks(NORMAL);
+      },
+      [on_difficulty_change_callbacks]() {
         on_difficulty_change_callbacks(NORMAL);
       });
-  Button hard_button =
-      Button(sf::Vector2f(100, 50), [on_difficulty_change_callbacks]() {
+  Button hard_button = Button(
+      sf::Vector2f(100, 50),
+      [on_difficulty_change_callbacks]() {
+        on_difficulty_change_callbacks(HARD);
+      },
+      [on_difficulty_change_callbacks]() {
         on_difficulty_change_callbacks(HARD);
       });
   this->menu_text = sf::Text("Minesweeper", Assets::font_bold, 24);
@@ -66,23 +89,18 @@ void MainMenuView::draw(sf::RenderWindow &window) {
   window.display();
 }
 
-const sf::Texture *get_field_texture(Field field) {
-  sf::Sprite sprite;
-  if (!field.is_revealed) {
-    return field.has_flag ? &Assets::flag_texture : &Assets::covered;
-  } else if (field.has_mine) {
-    return &Assets::exploded_texture;
-  }
-  return &Assets::tile_textures[field.mine_count];
-}
-
-GameView::GameView(sf::RenderWindow &window, Board &board_ref,
-                   std::function<void(unsigned long)> on_field_click_callback)
+GameView::GameView(
+    sf::RenderWindow &window, Board &board_ref,
+    std::function<void(unsigned long)> on_field_click_callback,
+    std::function<void(unsigned long)> on_field_right_click_callback)
     : board(board_ref) {
   for (int i = 0; i < board.get_board().size(); ++i) {
-    Button button(sf::Vector2f(50, 50), [on_field_click_callback, i]() {
-      on_field_click_callback(i);
-    });
+    Button button(
+        sf::Vector2f(50, 50),
+        [on_field_click_callback, i]() { on_field_click_callback(i); },
+        [on_field_right_click_callback, i]() {
+          on_field_right_click_callback(i);
+        });
     button.setPosition(sf::Vector2f((i % board.get_width()) * 50,
                                     (i / board.get_width()) * 50));
     this->buttons.push_back(button);

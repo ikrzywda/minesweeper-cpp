@@ -15,7 +15,7 @@ public:
 
   void start_game();
   void reveal_field(unsigned long field_index);
-  void flag_field(int row, int col);
+  void flag_field(unsigned long field_index);
   void run();
 };
 

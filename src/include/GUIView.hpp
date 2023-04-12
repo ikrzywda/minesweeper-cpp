@@ -28,7 +28,8 @@ class GameView : public ButtonView {
 
 public:
   GameView(sf::RenderWindow &window, Board &board_ref,
-           std::function<void(unsigned long)> on_field_click_callback);
+           std::function<void(unsigned long)> on_field_click_callback,
+           std::function<void(unsigned long)> on_field_right_click_callback);
   virtual ~GameView() = default;
   virtual void draw(sf::RenderWindow &window) override;
 };
@@ -37,7 +38,7 @@ class ConclusionView : public ButtonView {
   std::function<void()> return_to_main_menu_callback;
 
 public:
-  explicit ConclusionView(sf::RenderWindow &window,
+  explicit ConclusionView(sf::RenderWindow &window, std::string text,
                           std::function<void()> return_to_main_menu_callback);
   virtual ~ConclusionView() = default;
   virtual void draw(sf::RenderWindow &window) override;
@@ -61,7 +62,6 @@ public:
       : window(window_ref), board(board_ref),
         main_menu_view(main_menu_view_ref), game_view(game_view_ref) {
     board.subscribe_to_game_state_updated([this](GameState game_state) {
-      std::cout << "Game state updated" << std::endl;
       switch (game_state) {
       case UNKNOWN: {
         this->current_view = MAIN_MENU;
@@ -79,22 +79,35 @@ public:
       this->draw();
     });
     board.subscribe_to_board_updated([this]() { this->draw(); });
-    board.subscribe_to_mouse_position_updated(
-        [this](sf::Vector2i mouse_position) {
-          switch (this->current_view) {
-          case MAIN_MENU: {
-            this->main_menu_view.handle_click(sf::Vector2f(mouse_position));
-            break;
-          }
-          case GAME: {
-            this->game_view.handle_click(sf::Vector2f(mouse_position));
-            break;
-          }
-          case CONCLUSION: {
-            break;
-          }
-          }
-        });
+    board.subscribe_to_left_mouse_click([this](sf::Vector2i mouse_position) {
+      switch (this->current_view) {
+      case MAIN_MENU: {
+        this->main_menu_view.handle_click(sf::Vector2f(mouse_position));
+        break;
+      }
+      case GAME: {
+        this->game_view.handle_click(sf::Vector2f(mouse_position));
+        break;
+      }
+      case CONCLUSION: {
+        break;
+      }
+      }
+    });
+    board.subscribe_to_right_mouse_click([this](sf::Vector2i mouse_position) {
+      switch (this->current_view) {
+      case MAIN_MENU: {
+        break;
+      }
+      case GAME: {
+        this->game_view.handle_right_click(sf::Vector2f(mouse_position));
+        break;
+      }
+      case CONCLUSION: {
+        break;
+      }
+      }
+    });
     this->draw();
   };
 };

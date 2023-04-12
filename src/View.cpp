@@ -9,6 +9,15 @@ void ButtonView::handle_click(sf::Vector2f pos) {
   }
 }
 
+void ButtonView::handle_right_click(sf::Vector2f pos) {
+  for (auto &button : buttons) {
+    if (button.contains(pos)) {
+      button.on_right_click();
+      break;
+    }
+  }
+}
+
 void ButtonView::draw(sf::RenderWindow &window) {
   window.clear();
 
