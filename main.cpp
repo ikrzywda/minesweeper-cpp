@@ -1,11 +1,6 @@
 #include "src/include/AssetWrappers.hpp"
-#include "src/include/Board.hpp"
 #include "src/include/GUIView.hpp"
 #include "src/include/GUIViewController.hpp"
-#include "src/include/GUIViewModel.hpp"
-#include "src/include/TextView.hpp"
-#include "src/include/TextViewController.hpp"
-#include "src/include/View.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -26,7 +21,9 @@ int main() {
       [&controller](unsigned long field_index) {
         controller.flag_field(field_index);
       });
-  GUIView view(window, board, main_menu_view, game_view);
+  ConclusionView conclusion_view(window, board,
+                                 [&controller]() { controller.start_game(); });
+  GUIView view(window, board, main_menu_view, game_view, conclusion_view);
 
   controller.run();
   return 0;

@@ -36,9 +36,11 @@ public:
 
 class ConclusionView : public ButtonView {
   std::function<void()> return_to_main_menu_callback;
+  Board &board;
+  sf::Text conclusion_text;
 
 public:
-  explicit ConclusionView(sf::RenderWindow &window, std::string text,
+  explicit ConclusionView(sf::RenderWindow &window, Board &board_ref,
                           std::function<void()> return_to_main_menu_callback);
   virtual ~ConclusionView() = default;
   virtual void draw(sf::RenderWindow &window) override;
@@ -54,13 +56,16 @@ class GUIView {
 
   MainMenuView &main_menu_view;
   GameView &game_view;
+  ConclusionView &conclusion_view;
   void draw();
 
 public:
   GUIView(sf::RenderWindow &window_ref, GUIViewModel &board_ref,
-          MainMenuView &main_menu_view_ref, GameView &game_view_ref)
+          MainMenuView &main_menu_view_ref, GameView &game_view_ref,
+          ConclusionView &conclusion_view_ref)
       : window(window_ref), board(board_ref),
-        main_menu_view(main_menu_view_ref), game_view(game_view_ref) {
+        main_menu_view(main_menu_view_ref), game_view(game_view_ref),
+        conclusion_view(conclusion_view_ref) {
     board.subscribe_to_game_state_updated([this](GameState game_state) {
       switch (game_state) {
       case UNKNOWN: {
@@ -72,7 +77,7 @@ public:
         break;
       }
       default: {
-        this->current_view = MAIN_MENU;
+        this->current_view = CONCLUSION;
         break;
       }
       }
@@ -90,6 +95,7 @@ public:
         break;
       }
       case CONCLUSION: {
+        this->conclusion_view.handle_click(sf::Vector2f(mouse_position));
         break;
       }
       }

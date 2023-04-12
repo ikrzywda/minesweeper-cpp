@@ -116,6 +116,36 @@ void GameView::draw(sf::RenderWindow &window) {
   window.display();
 }
 
+ConclusionView::ConclusionView(
+    sf::RenderWindow &window, Board &board_ref,
+    std::function<void()> return_to_main_menu_callback)
+    : board(board_ref) {
+  this->conclusion_text = sf::Text("", Assets::font_bold, 24);
+  sf::Vector2f button_size(100, 50);
+  Button return_to_main_menu_button = Button(
+      button_size, return_to_main_menu_callback, return_to_main_menu_callback);
+  return_to_main_menu_button.setPosition(
+      sf::Vector2f(window.getSize().x / 2 - button_size.x / 2,
+                   conclusion_text.getGlobalBounds().top +
+                       conclusion_text.getGlobalBounds().height + 50));
+  return_to_main_menu_button.setFillColor(sf::Color::Green);
+  this->buttons.push_back(return_to_main_menu_button);
+};
+
+void ConclusionView::draw(sf::RenderWindow &window) {
+  window.clear();
+  if (this->board.get_game_state() == FINISHED_WIN) {
+    this->conclusion_text.setString("You won!");
+  } else {
+    this->conclusion_text.setString("You lost!");
+  }
+  window.draw(this->conclusion_text);
+  for (auto &button : this->buttons) {
+    window.draw(button);
+  }
+  window.display();
+}
+
 void GUIView::draw() {
   switch (this->current_view) {
   case MAIN_MENU:
@@ -124,5 +154,9 @@ void GUIView::draw() {
   case GAME:
     this->game_view.draw(this->window);
     break;
+  case CONCLUSION: {
+    this->conclusion_view.draw(this->window);
+    break;
+  }
   }
 }
