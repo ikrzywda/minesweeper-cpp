@@ -24,7 +24,6 @@ class GameState {
   int time_limit_seconds;
   unsigned int flags_remaining;
   GameDifficulty game_difficulty;
-  std::unique_ptr<Board> board_ref;
 
   std::vector<std::function<void()>> on_game_lost_callbacks;
   std::vector<std::function<void()>> on_game_won_callbacks;
@@ -41,6 +40,7 @@ public:
             std::function<void()> on_game_lost_callback,
             std::function<void()> on_game_won_callback,
             std::function<void()> on_board_updated_callback);
+  std::unique_ptr<Board> board_ref;
   unsigned long get_time_played_seconds() const;
   GameDifficulty get_game_difficulty() const;
 };
