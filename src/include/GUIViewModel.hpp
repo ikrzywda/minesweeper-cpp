@@ -12,7 +12,7 @@ class GUIViewModel : public Board {
   std::vector<std::function<void(sf::Vector2i)>>
       mouse_position_updated_callbacks;
 
-  void emit_mouse_position_updated();
+  void run_callbacks_mouse_position_updated();
 
 public:
   using Board::Board;

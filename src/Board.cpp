@@ -33,7 +33,6 @@ int Board::get_adjacent_field_indices(
 }
 
 void Board::populate_board_debug() {
-
   for (int i = 0; i < height; ++i) {
     this->set_field(i, 0, Field(true, false, false));
     this->set_field(i, i, Field(true, false, false));
@@ -64,19 +63,25 @@ void Board::eager_compute_mine_count() {
   }
 }
 
-Board::Board(int width, int height, GameMode game_mode) {
+Board::Board(int width, int height, int mine_count, int flag_count) {
   this->width = width;
   this->height = height;
   this->board = std::vector<Field>(width * height, Field());
-  this->game_state = UNKNOWN;
-  this->game_mode = game_mode;
   this->mine_count = 0;
+  this->flag_count = flag_count;
 
-  if (game_mode == DEBUG) {
-    this->populate_board_debug();
-  } else {
-    this->populate_board(game_mode);
-  }
+  this->populate_board(mine_count);
+  this->eager_compute_mine_count();
+}
+
+Board::Board(int width, int height) {
+  this->width = width;
+  this->height = height;
+  this->board = std::vector<Field>(width * height, Field());
+  this->mine_count = 0;
+  this->flag_count = 2137;
+
+  this->populate_board_debug();
   this->eager_compute_mine_count();
 }
 
@@ -84,20 +89,29 @@ void Board::subscribe_to_board_updated(std::function<void()> callback) {
   this->board_updated_callbacks.push_back(callback);
 }
 
-void Board::subscribe_to_game_state_updated(
-    std::function<void(GameState)> callback) {
-  this->game_state_updated_callbacks.push_back(callback);
+void Board::subscribe_to_game_lost(std::function<void()> callback) {
+  this->on_game_lost_callbacks.push_back(callback);
 }
 
-void Board::emit_board_updated() {
+void Board::subscribe_to_game_won(std::function<void()> callback) {
+  this->on_game_won_callbacks.push_back(callback);
+}
+
+void Board::run_callbacks_board_updated() {
   for (auto callback : this->board_updated_callbacks) {
     callback();
   }
 }
 
-void Board::emit_game_state_updated() {
-  for (auto callback : this->game_state_updated_callbacks) {
-    callback(this->game_state);
+void Board::run_callbacks_game_won() {
+  for (auto callback : this->on_game_won_callbacks) {
+    callback();
+  }
+}
+
+void Board::run_callbacks_game_lost() {
+  for (auto callback : this->on_game_lost_callbacks) {
+    callback();
   }
 }
 
@@ -122,11 +136,6 @@ void Board::debug_display() const {
     std::cout << current_field_str;
     col++;
   }
-}
-
-void Board::start_game() {
-  this->game_state = RUNNING;
-  this->emit_game_state_updated();
 }
 
 int Board::set_field(int x, int y, Field value) {
@@ -174,8 +183,7 @@ void Board::evaluate_score() {
                                              return sum;
                                            });
   if (uncovered_field_count == this->mine_count) {
-    this->game_state = FINISHED_WIN;
-    this->emit_game_state_updated();
+    this->run_callbacks_game_won();
   }
 }
 
@@ -189,13 +197,13 @@ bool Board::has_flag(unsigned long field_index) const {
 }
 
 void Board::toggle_flag(unsigned long field_index) {
-
   if (field_index < 0 || field_index > this->board.size()) {
     return;
   }
 
   this->board.at(field_index).has_flag = !this->board.at(field_index).has_flag;
-  this->emit_board_updated();
+  this->flag_count--;
+  this->run_callbacks_board_updated();
 }
 
 void Board::reveal_field(unsigned long field_index) {
@@ -211,14 +219,13 @@ void Board::reveal_field(unsigned long field_index) {
     return;
   }
   if (field.has_mine) {
-    this->game_state = FINISHED_LOSS;
-    this->emit_game_state_updated();
+    this->run_callbacks_game_lost();
     return;
   }
   field.is_revealed = true;
   this->board.at(field_index) = field;
   this->reveal_adjacent_fields(field_index);
-  this->emit_board_updated();
+  this->run_callbacks_board_updated();
   this->evaluate_score();
 }
 
@@ -241,6 +248,3 @@ int Board::reveal_adjacent_fields(unsigned long field_index) {
 }
 
 const std::vector<Field> &Board::get_board() const { return board; }
-
-GameState Board::get_game_state() const { return this->game_state; }
-GameMode Board::get_game_mode() const { return this->game_mode; }

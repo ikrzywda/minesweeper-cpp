@@ -1,6 +1,6 @@
 #include "include/GUIViewModel.hpp"
 
-void GUIViewModel::emit_mouse_position_updated() {
+void GUIViewModel::run_callbacks_mouse_position_updated() {
   for (auto callback : mouse_position_updated_callbacks) {
     callback(this->mouse_position);
   }
@@ -16,5 +16,5 @@ void GUIViewModel::set_mouse_position(sf::Vector2i mouse_position) {
     return;
   }
   this->mouse_position = mouse_position;
-  this->emit_mouse_position_updated();
+  this->run_callbacks_mouse_position_updated();
 }

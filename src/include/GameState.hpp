@@ -1,0 +1,48 @@
+#ifndef GAME_STATE_HPP
+#define GAME_STATE_HPP
+
+#include "Board.hpp"
+
+#include <ctime>
+#include <vector>
+
+enum GameDifficulty { EASY, NORMAL, HARD };
+
+struct DifficultySetup {
+  int width;
+  int height;
+  int mine_count;
+  int flag_count;
+  int time_limit_seconds;
+};
+
+static const std::vector<DifficultySetup> difficulty_setups = {
+    {9, 9, 10, 10, 300}, {16, 16, 40, 40, 300}, {30, 16, 99, 99, 300}};
+
+class GameState {
+  time_t session_start_time;
+  int time_limit_seconds;
+  unsigned int flags_remaining;
+  GameDifficulty game_difficulty;
+  std::unique_ptr<Board> board_ref;
+
+  std::vector<std::function<void()>> on_game_lost_callbacks;
+  std::vector<std::function<void()>> on_game_won_callbacks;
+  std::vector<std::function<void()>> on_board_updated_callbacks;
+
+  void subscribe_to_game_lost(std::function<void()> callback);
+  void subscribe_to_game_won(std::function<void()> callback);
+  void subscribe_to_board_updated(std::function<void()> callback);
+
+  void run_callbacks_game_lost();
+
+public:
+  GameState(GameDifficulty game_difficulty,
+            std::function<void()> on_game_lost_callback,
+            std::function<void()> on_game_won_callback,
+            std::function<void()> on_board_updated_callback);
+  unsigned long get_time_played_seconds() const;
+  GameDifficulty get_game_difficulty() const;
+};
+
+#endif // GAME_STATE_HPP
