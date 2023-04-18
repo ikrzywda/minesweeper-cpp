@@ -56,8 +56,25 @@ void BoardView::update() {
   }
 }
 
+sf::Vector2f BoardView::get_size() const { return this->view_dimensions; }
+sf::Vector2f BoardView::get_position() const { return this->view_position; }
+sf::Vector2f BoardView::get_field_dimensions() const {
+  return this->field_dimensions;
+}
+
 void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   for (auto &rect : this->field_rects) {
     target.draw(rect);
+  }
+}
+
+void BoardView::subscribe_to_field_click(
+    std::function<void(unsigned long)> handler) {
+  this->field_click_handlers.push_back(handler);
+}
+
+void BoardView::run_field_click_handlers(unsigned long field_index) {
+  for (auto &handler : this->field_click_handlers) {
+    handler(field_index);
   }
 }
