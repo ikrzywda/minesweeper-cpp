@@ -29,20 +29,21 @@ class GameState {
   std::vector<std::function<void()>> on_game_won_callbacks;
   std::vector<std::function<void()>> on_board_updated_callbacks;
 
-  void subscribe_to_game_lost(std::function<void()> callback);
-  void subscribe_to_game_won(std::function<void()> callback);
-  void subscribe_to_board_updated(std::function<void()> callback);
-
-  void run_callbacks_game_lost();
+  void run_callbacks_game_lost() const;
 
 public:
   GameState(GameDifficulty game_difficulty,
             std::function<void()> on_game_lost_callback,
             std::function<void()> on_game_won_callback,
             std::function<void()> on_board_updated_callback);
+  bool create_new_game(GameDifficulty game_difficulty);
   std::unique_ptr<Board> board_ref;
   unsigned long get_time_played_seconds() const;
   GameDifficulty get_game_difficulty() const;
+
+  void subscribe_to_game_lost(std::function<void()> callback);
+  void subscribe_to_game_won(std::function<void()> callback);
+  void subscribe_to_board_updated(std::function<void()> callback);
 };
 
 #endif // GAME_STATE_HPP

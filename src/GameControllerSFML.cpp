@@ -13,11 +13,11 @@ void GameControllerSFML::toggle_flag(unsigned long field_index) {
 }
 
 void GameControllerSFML::reset_game() {
-  // TODO: Implement after implementing creating new board inplace in GameState
+  this->game_state.create_new_game(this->game_state.get_game_difficulty());
 }
 
 void GameControllerSFML::start_game(GameDifficulty game_difficulty) {
-  // TODO: Implement after implementing creating new board inplace in GameState
+  this->game_state.create_new_game(game_difficulty);
 }
 
 void GameControllerSFML::pause_game() {}
