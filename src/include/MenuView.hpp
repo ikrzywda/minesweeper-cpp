@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class MenuView : sf::Drawable {
+class MenuView {
   sf::RectangleShape background;
 
   sf::Text title;
@@ -21,9 +21,10 @@ class MenuView : sf::Drawable {
   void run_exit_game_click_handlers();
   void run_difficulty_click_handlers(unsigned long difficulty);
   void run_click_handlers(sf::Vector2i mouse_position);
+  void draw(sf::RenderWindow &window) const;
 
 public:
-  MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions);
+  MenuView();
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
 
@@ -32,7 +33,6 @@ public:
   void
   subscribe_to_difficulty_click(std::function<void(unsigned long)> handler);
 
-  void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 };
 
 #endif

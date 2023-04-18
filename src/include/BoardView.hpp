@@ -8,7 +8,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-class BoardView : sf::Drawable {
+
+class BoardView {
   const sf::Texture *get_field_texture(Field field);
   sf::Vector2f view_position;
   sf::Vector2f view_dimensions;
@@ -22,8 +23,7 @@ class BoardView : sf::Drawable {
 
 public:
   void update();
-  BoardView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
-            GameState &game_state);
+  BoardView(GameState &game_state);
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
   sf::Vector2f get_size() const;
@@ -33,7 +33,7 @@ public:
   void subscribe_to_field_click(std::function<void(unsigned long)> handler);
   void run_field_click_handlers(unsigned long field_index);
 
-  void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+  void draw(sf::RenderWindow &window) const;
 };
 
 #endif

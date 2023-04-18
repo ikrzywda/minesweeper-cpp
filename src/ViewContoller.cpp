@@ -8,7 +8,6 @@ void ViewController::draw() {
   case Views::GAME_OVER:
     break;
   case Views::MENU:
-    break;
   }
 }
 
@@ -68,10 +67,10 @@ void ViewController::on_click() {
 }
 
 ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
-                               BoardView &board_view_ref,
                                GameController &game_controller_ref)
-    : window(window), board_view(board_view_ref),
+    : window(window), board_view(game_state)
       game_controller(game_controller_ref) {
+  this->board_view = BoardView(game_state);
   game_state.subscribe_to_board_updated(
       std::bind(&ViewController::on_board_update, this));
   game_state.subscribe_to_game_won(

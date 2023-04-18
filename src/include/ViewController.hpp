@@ -2,6 +2,7 @@
 #define VIEW_CONTROLLER_HPP
 
 #include "BoardView.hpp"
+#include "MenuView.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -10,6 +11,7 @@ enum Views { MENU, BOARD, GAME_OVER };
 class ViewController {
   sf::RenderWindow &window;
   BoardView &board_view;
+  MenuView &menu_view;
   GameController &game_controller;
   Views current_view;
 
@@ -26,9 +28,9 @@ class ViewController {
 
 public:
   ViewController(sf::RenderWindow &window, GameState &game_state,
-                 BoardView &board_view_ref,
                  GameController &game_controller_ref);
   void draw();
 };
+
 
 #endif

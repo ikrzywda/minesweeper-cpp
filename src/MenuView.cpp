@@ -95,12 +95,12 @@ void MenuView::subscribe_to_difficulty_click(
   this->difficulty_click_handlers.push_back(handler);
 }
 
-void MenuView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-  target.draw(this->background);
-  target.draw(this->title);
-  target.draw(this->new_game_button);
-  target.draw(this->exit_game_button);
+void MenuView::draw(sf::RenderWindow &window) const {
+  window.draw(this->background);
+  window.draw(this->title);
+  window.draw(this->new_game_button);
+  window.draw(this->exit_game_button);
   for (auto &button : this->difficulty_buttons) {
-    target.draw(button);
+    window.draw(button);
   }
 }

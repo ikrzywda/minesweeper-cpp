@@ -1,7 +1,6 @@
 #include "include/BoardView.hpp"
 
-BoardView::BoardView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
-                     GameState &game_state)
+BoardView::BoardView(GameState &game_state)
     : game_state(game_state) {
   this->view_position = view_position;
   this->view_dimensions = view_dimensions;
@@ -62,9 +61,9 @@ sf::Vector2f BoardView::get_field_dimensions() const {
   return this->field_dimensions;
 }
 
-void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void BoardView::draw(sf::RenderWindow &window) const {
   for (auto &rect : this->field_rects) {
-    target.draw(rect);
+    window.draw(rect);
   }
 }
 
