@@ -9,7 +9,7 @@
 
 #include <SFML/Graphics.hpp>
 
-enum Views { MENU, BOARD, GAME_OVER };
+enum Views { MENU, BOARD, WON, LOST };
 
 class ViewController {
   sf::RenderWindow &window;

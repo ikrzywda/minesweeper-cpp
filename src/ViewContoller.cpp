@@ -5,8 +5,11 @@ void ViewController::draw() {
   case Views::BOARD:
     this->board_view->draw(this->window);
     break;
-  case Views::GAME_OVER:
-    this->game_over_view->draw(this->window);
+  case Views::WON:
+    this->game_over_view->draw(this->window, true);
+    break;
+  case Views::LOST:
+    this->game_over_view->draw(this->window, false);
     break;
   case Views::MENU:
     this->menu_view->draw(this->window);
@@ -15,12 +18,12 @@ void ViewController::draw() {
 }
 
 void ViewController::on_game_lost() {
-  this->current_view = Views::GAME_OVER;
+  this->current_view = Views::LOST;
   this->draw();
 }
 
 void ViewController::on_game_won() {
-  this->current_view = Views::GAME_OVER;
+  this->current_view = Views::WON;
   this->draw();
 }
 
@@ -43,7 +46,8 @@ void ViewController::on_click() {
   case Views::BOARD:
     this->board_view->run_click_handlers(mouse_position);
     break;
-  case Views::GAME_OVER:
+  case Views::LOST:
+  case Views::WON:
     this->game_over_view->run_click_handlers(mouse_position);
     break;
   case Views::MENU:
@@ -79,5 +83,5 @@ ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
   game_state.subscribe_to_game_lost(
       std::bind(&ViewController::on_game_lost, this));
 
-  this->current_view = Views::BOARD;
+  this->current_view = Views::MENU;
 }

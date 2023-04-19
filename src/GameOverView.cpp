@@ -45,7 +45,12 @@ void GameOverView::subscribe_to_back_to_menu_click(
   this->back_to_menu_click_handlers.push_back(handler);
 }
 
-void GameOverView::draw(sf::RenderWindow &window) const {
+void GameOverView::draw(sf::RenderWindow &window, bool has_won) {
+  if (has_won) {
+    this->title.setString("You Won!");
+  } else {
+    this->title.setString("You Lost!");
+  }
   window.draw(this->background);
   window.draw(this->title);
   window.draw(*this->back_to_menu_button);
