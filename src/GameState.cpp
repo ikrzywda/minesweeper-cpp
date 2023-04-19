@@ -46,13 +46,13 @@ bool GameState::create_new_game() {
   this->time_limit_seconds =
       difficulty_setups.at(this->game_difficulty).time_limit_seconds;
 
-  this->board_ref = std::make_unique<Board>(10, 10);
+  // this->board_ref = std::make_unique<Board>(30, 30);
 
-  // this->board_ref = std::make_unique<Board>(
-  //     difficulty_setups.at(this->game_difficulty).width,
-  //     difficulty_setups.at(this->game_difficulty).height,
-  //     difficulty_setups.at(this->game_difficulty).mine_count,
-  //     difficulty_setups.at(this->game_difficulty).flag_count);
+  this->board_ref = std::make_unique<Board>(
+      difficulty_setups.at(this->game_difficulty).width,
+      difficulty_setups.at(this->game_difficulty).height,
+      difficulty_setups.at(this->game_difficulty).mine_count,
+      difficulty_setups.at(this->game_difficulty).flag_count);
 
   for (auto &callback : this->on_game_lost_callbacks) {
     this->board_ref->subscribe_to_game_lost(callback);
@@ -79,4 +79,12 @@ unsigned long GameState::get_time_played_seconds() const {
 
 GameDifficulty GameState::get_game_difficulty() const {
   return this->game_difficulty;
+}
+
+bool GameState::set_game_difficulty(GameDifficulty difficulty) {
+  this->game_difficulty = difficulty;
+  this->time_limit_seconds =
+      difficulty_setups.at(this->game_difficulty).time_limit_seconds;
+  this->run_callbacks_difficulty_updated();
+  return true;
 }

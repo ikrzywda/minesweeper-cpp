@@ -19,6 +19,10 @@ class MenuView {
   std::unique_ptr<TextButtonView> new_game_button;
   std::unique_ptr<TextButtonView> exit_game_button;
 
+  std::unique_ptr<TextButtonView> easy_difficulty_button;
+  std::unique_ptr<TextButtonView> normal_difficulty_button;
+  std::unique_ptr<TextButtonView> hard_difficulty_button;
+
   std::vector<sf::RectangleShape> difficulty_buttons;
 
   std::vector<std::function<void()>> new_game_click_handlers;
@@ -38,7 +42,7 @@ public:
   void subscribe_to_new_game_click(std::function<void()> handler);
   void subscribe_to_exit_game_click(std::function<void()> handler);
   void
-  subscribe_to_difficulty_click(std::function<void(unsigned long)> handler);
+  subscribe_to_difficulty_click(std::function<void(GameDifficulty)> handler);
   void run_click_handlers(sf::Vector2i mouse_position);
 
   void draw(sf::RenderWindow &window) const;

@@ -45,9 +45,20 @@ void BoardView::set_position(sf::Vector2f view_position) {
 
 void BoardView::update() {
   int board_width = this->game_state.board_ref->get_width();
+  int board_height = this->game_state.board_ref->get_height();
+
+  if (field_rects.size() != board_width * board_height) {
+    this->field_rects =
+        std::vector<sf::RectangleShape>(board_width * board_height);
+  }
+
+  this->field_dimensions = sf::Vector2f(view_dimensions.x / board_width,
+                                        view_dimensions.y / board_height);
+
   std::vector<Field> game_board = this->game_state.board_ref->get_board();
 
   for (unsigned long i = 0; i < this->field_rects.size(); i++) {
+    this->field_rects[i].setSize(this->field_dimensions);
     this->field_rects[i].setPosition(
         sf::Vector2f((i % board_width) * this->field_dimensions.x,
                      (i / board_width) * this->field_dimensions.y));

@@ -13,4 +13,7 @@ void GameControllerSFML::toggle_flag(unsigned long field_index) {
 
 void GameControllerSFML::reset_game() { this->game_state.create_new_game(); }
 
-void GameControllerSFML::start_game() { this->game_state.create_new_game(); }
+void GameControllerSFML::start_game(GameDifficulty difficulty) {
+  this->game_state.set_game_difficulty(difficulty);
+  this->game_state.create_new_game();
+}

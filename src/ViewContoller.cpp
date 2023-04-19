@@ -33,7 +33,7 @@ void ViewController::on_board_update() {
 }
 
 void ViewController::on_game_start() {
-  this->game_controller.start_game();
+  // this->game_controller.start_game();
   this->current_view = Views::BOARD;
   this->board_view->update();
   this->draw();
@@ -75,6 +75,14 @@ ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
 
   this->game_over_view->subscribe_to_back_to_menu_click(
       [this]() { this->current_view = Views::MENU; });
+
+  this->menu_view->subscribe_to_difficulty_click(
+      [this](GameDifficulty difficulty) {
+        this->current_view = Views::BOARD;
+        this->game_controller.start_game(difficulty);
+        board_view->update();
+        this->draw();
+      });
 
   game_state.subscribe_to_board_updated(
       std::bind(&ViewController::on_board_update, this));

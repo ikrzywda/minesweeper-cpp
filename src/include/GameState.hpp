@@ -17,7 +17,7 @@ struct DifficultySetup {
 };
 
 static const std::vector<DifficultySetup> difficulty_setups = {
-    {9, 9, 10, 10, 300}, {16, 16, 40, 40, 300}, {30, 16, 99, 99, 300}};
+    {9, 9, 10, 10, 300}, {16, 16, 40, 40, 300}, {30, 30, 99, 99, 300}};
 
 class GameState {
   time_t session_start_time;
@@ -39,6 +39,7 @@ public:
   std::unique_ptr<Board> board_ref;
   unsigned long get_time_played_seconds() const;
   GameDifficulty get_game_difficulty() const;
+  bool set_game_difficulty(GameDifficulty difficulty);
 
   void subscribe_to_game_lost(std::function<void()> callback);
   void subscribe_to_game_won(std::function<void()> callback);

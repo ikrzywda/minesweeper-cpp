@@ -13,7 +13,6 @@ int main() {
 
   GameState game_state;
   GameControllerSFML game_controller(game_state);
-  game_controller.start_game();
   ViewController view_controller(window, game_state, game_controller);
 
   while (window.isOpen()) {

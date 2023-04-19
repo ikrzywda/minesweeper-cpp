@@ -3,15 +3,30 @@
 MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
                    GameState &game_state)
     : game_state(game_state) {
+  sf::Vector2f button_position(view_position.x + view_dimensions.x / 2 - 150,
+                               view_position.y + view_dimensions.y / 2);
+  sf::Vector2f button_size(100, 50);
+
   this->new_game_button = std::make_unique<TextButtonView>(
       sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
-                   view_position.y + view_dimensions.y / 2 - 100),
-      sf::Vector2f(200, 50), "New Game");
+                   view_position.y + view_dimensions.y / 2 - 150),
+      sf::Vector2f(200, 50), "Start");
+
+  this->easy_difficulty_button =
+      std::make_unique<TextButtonView>(button_position, button_size, "Easy");
+
+  this->normal_difficulty_button = std::make_unique<TextButtonView>(
+      sf::Vector2f(button_position.x + 110, button_position.y), button_size,
+      "Medium");
+
+  this->hard_difficulty_button = std::make_unique<TextButtonView>(
+      sf::Vector2f(button_position.x + 220, button_position.y), button_size,
+      "Hard");
 
   this->exit_game_button = std::make_unique<TextButtonView>(
       sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
-                   view_position.y + view_dimensions.y / 2 + 100),
-      sf::Vector2f(200, 50), "Exit Game");
+                   view_position.y + view_dimensions.y / 2 + 200),
+      sf::Vector2f(200, 50), "Exit");
 
   this->set_position(view_position);
   this->set_size(view_dimensions);
@@ -66,26 +81,29 @@ void MenuView::run_exit_game_click_handlers() {
 }
 
 void MenuView::run_difficulty_click_handlers(GameDifficulty difficulty) {
+
   for (auto &handler : this->difficulty_click_handlers) {
     handler(difficulty);
   }
 }
 
 void MenuView::run_click_handlers(sf::Vector2i mouse_position) {
-  if (this->new_game_button->getGlobalBounds().contains(
-          sf::Vector2f(mouse_position))) {
+  sf::Vector2f mouse_position_f(mouse_position.x, mouse_position.y);
+  // make it a map? idk
+  if (this->new_game_button->getGlobalBounds().contains(mouse_position_f)) {
     this->run_new_game_click_handlers();
   } else if (this->exit_game_button->getGlobalBounds().contains(
-                 sf::Vector2f(mouse_position))) {
+                 mouse_position_f)) {
     this->run_exit_game_click_handlers();
-  } else {
-    for (int i = 0; i < this->difficulty_buttons.size(); i++) {
-      if (this->difficulty_buttons[i].getGlobalBounds().contains(
-              sf::Vector2f(mouse_position))) {
-        this->run_difficulty_click_handlers(
-            GameDifficulty(i)); // SHIT -- make it safe
-      }
-    }
+  } else if (this->easy_difficulty_button->getGlobalBounds().contains(
+                 mouse_position_f)) {
+    this->run_difficulty_click_handlers(GameDifficulty::EASY);
+  } else if (this->normal_difficulty_button->getGlobalBounds().contains(
+                 mouse_position_f)) {
+    this->run_difficulty_click_handlers(GameDifficulty::NORMAL);
+  } else if (this->hard_difficulty_button->getGlobalBounds().contains(
+                 mouse_position_f)) {
+    this->run_difficulty_click_handlers(GameDifficulty::HARD);
   }
 }
 
@@ -98,7 +116,7 @@ void MenuView::subscribe_to_exit_game_click(std::function<void()> handler) {
 }
 
 void MenuView::subscribe_to_difficulty_click(
-    std::function<void(unsigned long)> handler) {
+    std::function<void(GameDifficulty)> handler) {
   this->difficulty_click_handlers.push_back(handler);
 }
 
@@ -106,8 +124,11 @@ void MenuView::draw(sf::RenderWindow &window) const {
   window.draw(this->background);
   window.draw(this->title);
 
-  this->new_game_button->draw(window);
-  this->exit_game_button->draw(window);
+  // this->new_game_button->draw(window);
+  // this->exit_game_button->draw(window);
+  this->easy_difficulty_button->draw(window);
+  this->normal_difficulty_button->draw(window);
+  this->hard_difficulty_button->draw(window);
   for (auto &button : this->difficulty_buttons) {
     window.draw(button);
   }

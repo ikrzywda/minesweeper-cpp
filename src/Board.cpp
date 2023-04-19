@@ -182,8 +182,6 @@ void Board::evaluate_score() {
                                              }
                                              return sum;
                                            });
-  std::cout << "Uncovered fields: " << uncovered_field_count << std::endl;
-  std::cout << "Mine count: " << this->mine_count << std::endl;
   if (uncovered_field_count < this->mine_count) {
     std::cout << "You won!" << std::endl;
     this->run_callbacks_game_won();

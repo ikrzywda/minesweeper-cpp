@@ -13,7 +13,7 @@ public:
   void uncover_field(unsigned long field_index);
   void toggle_flag(unsigned long field_index);
   void reset_game();
-  void start_game();
+  void start_game(GameDifficulty difficulty);
 };
 
 #endif
