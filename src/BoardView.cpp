@@ -89,8 +89,8 @@ void BoardView::run_click_handlers(sf::Vector2i mouse_position) {
 
   for (size_t i = 0; i < this->field_rects.size(); i++) {
     if (this->field_rects[i].getGlobalBounds().contains(mouse_position_f)) {
-      std::cout << "Clicked on field " << i << std::endl;
       this->run_field_click_handlers(i);
+      this->update();
       break;
     }
   }

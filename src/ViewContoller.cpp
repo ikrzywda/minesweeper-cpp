@@ -31,7 +31,6 @@ void ViewController::on_board_update() {
 
 void ViewController::on_game_start() {
   this->game_controller.start_game();
-  std::cout << "Starting game" << std::endl;
   this->current_view = Views::BOARD;
   this->board_view->update();
   this->draw();
