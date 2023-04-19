@@ -28,7 +28,6 @@ class MenuView {
   void run_new_game_click_handlers();
   void run_exit_game_click_handlers();
   void run_difficulty_click_handlers(GameDifficulty difficulty);
-  void draw(sf::RenderWindow &window) const;
 
 public:
   MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,

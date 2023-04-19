@@ -1,8 +1,13 @@
 #include "include/BoardView.hpp"
 
-BoardView::BoardView(GameState &game_state) : game_state(game_state) {
+BoardView::BoardView(GameState &game_state, sf::Vector2f view_position,
+                     sf::Vector2f view_dimensions)
+    : game_state(game_state) {
   this->view_position = view_position;
   this->view_dimensions = view_dimensions;
+  this->field_dimensions = sf::Vector2f(
+      view_dimensions.x / this->game_state.board_ref->get_width(),
+      view_dimensions.y / this->game_state.board_ref->get_height());
   this->field_rects =
       std::vector<sf::RectangleShape>(this->game_state.board_ref->get_width() *
                                       this->game_state.board_ref->get_height());
@@ -11,6 +16,7 @@ BoardView::BoardView(GameState &game_state) : game_state(game_state) {
     rect.setSize(this->field_dimensions);
     rect.setTexture(&Assets::covered);
   }
+  this->update();
 }
 
 const sf::Texture *BoardView::get_field_texture(Field field) {
@@ -42,10 +48,10 @@ void BoardView::update() {
   std::vector<Field> game_board = this->game_state.board_ref->get_board();
 
   for (unsigned long i = 0; i < this->field_rects.size(); i++) {
-    this->field_rects.at(i).setPosition(
+    this->field_rects[i].setPosition(
         sf::Vector2f((i % board_width) * this->field_dimensions.x,
                      (i / board_width) * this->field_dimensions.y));
-    this->field_rects.at(i).setTexture(this->get_field_texture(game_board[i]));
+    this->field_rects[i].setTexture(this->get_field_texture(game_board[i]));
   }
 }
 
@@ -81,9 +87,11 @@ void BoardView::run_click_handlers(sf::Vector2i mouse_position) {
     return;
   }
 
-  unsigned long field_index =
-      (mouse_position_f.x - this->view_position.x) / this->field_dimensions.x +
-      (mouse_position_f.y - this->view_position.y) / this->field_dimensions.y *
-          this->game_state.board_ref->get_width();
-  this->run_field_click_handlers(field_index);
+  for (size_t i = 0; i < this->field_rects.size(); i++) {
+    if (this->field_rects[i].getGlobalBounds().contains(mouse_position_f)) {
+      std::cout << "Clicked on field " << i << std::endl;
+      this->run_field_click_handlers(i);
+      break;
+    }
+  }
 }

@@ -4,6 +4,7 @@
 #include "BoardView.hpp"
 #include "GameControllerSFML.hpp"
 #include "GameOverView.hpp"
+#include "GameState.hpp"
 #include "MenuView.hpp"
 
 #include <SFML/Graphics.hpp>

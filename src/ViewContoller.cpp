@@ -31,6 +31,7 @@ void ViewController::on_board_update() {
 
 void ViewController::on_game_start() {
   this->game_controller.start_game();
+  std::cout << "Starting game" << std::endl;
   this->current_view = Views::BOARD;
   this->draw();
 }
@@ -54,14 +55,19 @@ void ViewController::on_click() {
 ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
                                GameControllerSFML &game_controller_ref)
     : window(window), game_controller(game_controller_ref) {
-  this->board_view = std::make_unique<BoardView>(game_state);
-  this->menu_view =
-      std::make_unique<MenuView>(sf::Vector2f(0, 0), window.getSize());
-  this->game_over_view =
-      std::make_unique<GameOverView>(sf::Vector2f(0, 0), window.getSize());
+  this->board_view = std::make_unique<BoardView>(
+      game_state, sf::Vector2f(0, 0), sf::Vector2f(window.getSize()));
+  this->menu_view = std::make_unique<MenuView>(
+      sf::Vector2f(0, 0), sf::Vector2f(window.getSize()), game_state);
+  this->game_over_view = std::make_unique<GameOverView>(
+      sf::Vector2f(0, 0), sf::Vector2f(window.getSize()));
 
   this->menu_view->subscribe_to_new_game_click(
       std::bind(&ViewController::on_game_start, this));
+
+  this->board_view->subscribe_to_field_click(
+      std::bind(&GameControllerSFML::uncover_field, &game_controller_ref,
+                std::placeholders::_1));
 
   game_state.subscribe_to_board_updated(
       std::bind(&ViewController::on_board_update, this));
@@ -69,4 +75,6 @@ ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
       std::bind(&ViewController::on_game_won, this));
   game_state.subscribe_to_game_lost(
       std::bind(&ViewController::on_game_lost, this));
+
+  this->current_view = Views::BOARD;
 }

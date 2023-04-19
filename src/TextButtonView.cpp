@@ -8,10 +8,15 @@ TextButtonView::TextButtonView(sf::Vector2f position, sf::Vector2f size,
   this->setOutlineColor(sf::Color::Black);
   this->setOutlineThickness(1);
   this->text.setString(text);
-  this->text.setFont(Assets::font_regular);
+  this->text.setFont(Assets::font_bold);
   this->text.setCharacterSize(20);
   this->text.setFillColor(sf::Color::Black);
   this->text.setPosition(sf::Vector2f(
       position.x + size.x / 2 - this->text.getLocalBounds().width / 2,
       position.y + size.y / 2 - this->text.getLocalBounds().height / 2));
+}
+
+void TextButtonView::draw(sf::RenderWindow &window) const {
+  window.draw(*this);
+  window.draw(this->text);
 }

@@ -7,11 +7,13 @@
 
 int main() {
 
+
   Assets::load_assets();
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(500, 500)), "SFML works!");
 
   GameState game_state;
   GameControllerSFML game_controller(game_state);
+  game_controller.start_game();
   ViewController view_controller(window, game_state, game_controller);
 
   while (window.isOpen()) {
@@ -24,7 +26,9 @@ int main() {
       }
     }
 
+    window.clear();
     view_controller.draw();
+    window.display();
   }
 
 

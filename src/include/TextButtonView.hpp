@@ -10,6 +10,7 @@ class TextButtonView : public sf::RectangleShape {
 
 public:
   TextButtonView(sf::Vector2f position, sf::Vector2f size, std::string text);
+  void draw(sf::RenderWindow &window) const;
 };
 
 #endif

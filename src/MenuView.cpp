@@ -15,10 +15,10 @@ MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
 
   this->set_position(view_position);
   this->set_size(view_dimensions);
-  this->background.setFillColor(sf::Color(0, 0, 0, 200));
+  this->background.setFillColor(sf::Color::Black);
   this->background.setOutlineColor(sf::Color::Black);
   this->background.setOutlineThickness(1);
-  this->title.setFont(Assets::font_regular);
+  this->title.setFont(Assets::font_bold);
   this->title.setCharacterSize(50);
   this->title.setFillColor(sf::Color::White);
   this->title.setString("Minesweeper");
@@ -28,7 +28,7 @@ MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
                        this->title.getLocalBounds().width / 2,
                    view_position.y + 50));
 
-  this->difficulty_title.setFont(Assets::font_regular);
+  this->difficulty_title.setFont(Assets::font_bold);
   this->difficulty_title.setCharacterSize(30);
   this->difficulty_title.setFillColor(sf::Color::White);
   this->difficulty_title.setString(
@@ -71,12 +71,6 @@ void MenuView::run_difficulty_click_handlers(GameDifficulty difficulty) {
   }
 }
 
-void MenuView::run_new_game_click_handlers() {
-  for (auto &handler : this->new_game_click_handlers) {
-    handler();
-  }
-}
-
 void MenuView::run_click_handlers(sf::Vector2i mouse_position) {
   if (this->new_game_button->getGlobalBounds().contains(
           sf::Vector2f(mouse_position))) {
@@ -103,14 +97,6 @@ void MenuView::subscribe_to_exit_game_click(std::function<void()> handler) {
   this->exit_game_click_handlers.push_back(handler);
 }
 
-void MenuView::subscribe_to_new_game_click(std::function<void()> handler) {
-  this->new_game_click_handlers.push_back(handler);
-}
-
-void MenuView::subscribe_to_exit_game_click(std::function<void()> handler) {
-  this->exit_game_click_handlers.push_back(handler);
-}
-
 void MenuView::subscribe_to_difficulty_click(
     std::function<void(unsigned long)> handler) {
   this->difficulty_click_handlers.push_back(handler);
@@ -120,8 +106,8 @@ void MenuView::draw(sf::RenderWindow &window) const {
   window.draw(this->background);
   window.draw(this->title);
 
-  window.draw(*this->new_game_button);
-  window.draw(*this->exit_game_button);
+  this->new_game_button->draw(window);
+  this->exit_game_button->draw(window);
   for (auto &button : this->difficulty_buttons) {
     window.draw(button);
   }

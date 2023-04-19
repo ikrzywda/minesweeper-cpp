@@ -1,9 +1,9 @@
 #ifndef GAME_CONTROLLER_SFML_HPP
 #define GAME_CONTROLLER_SFML_HPP
 
-#include <SFML/Graphics.hpp>
+#include "GameState.hpp"
 
-#include "GameController.hpp"
+#include <SFML/Graphics.hpp>
 
 class GameControllerSFML {
   GameState &game_state;

@@ -2,7 +2,6 @@
 #define BOARD_VIEW_HPP
 
 #include "AssetWrappers.hpp"
-#include "GameController.hpp"
 #include "GameState.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -21,7 +20,8 @@ class BoardView {
 
 public:
   void update();
-  BoardView(GameState &game_state);
+  BoardView(GameState &game_state, sf::Vector2f view_position,
+            sf::Vector2f view_dimensions);
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
   sf::Vector2f get_size() const;

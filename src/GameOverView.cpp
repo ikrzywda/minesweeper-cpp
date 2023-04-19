@@ -12,7 +12,7 @@ GameOverView::GameOverView(sf::Vector2f view_position,
   this->background.setFillColor(sf::Color(0, 0, 0, 200));
   this->background.setOutlineColor(sf::Color::Black);
   this->background.setOutlineThickness(1);
-  this->title.setFont(Assets::font_regular);
+  this->title.setFont(Assets::font_bold);
   this->title.setCharacterSize(50);
   this->title.setFillColor(sf::Color::White);
   this->title.setString("Game Over!");
