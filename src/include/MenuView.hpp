@@ -1,11 +1,11 @@
 #ifndef MENU_VIEW_HPP
 #define MENU_VIEW_HPP
 
-#include "TextButtonView.hpp"
 #include "GameState.hpp"
+#include "TextButtonView.hpp"
 
-#include <map>
 #include <SFML/Graphics.hpp>
+#include <map>
 
 static const std::map<GameDifficulty, std::string> game_difficulty_names = {
     {EASY, "Easy"}, {NORMAL, "Normal"}, {HARD, "Hard"}};
@@ -31,7 +31,8 @@ class MenuView {
   void draw(sf::RenderWindow &window) const;
 
 public:
-  MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, GameState &game_state);
+  MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
+           GameState &game_state);
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
 

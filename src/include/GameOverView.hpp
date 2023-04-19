@@ -20,9 +20,10 @@ public:
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
 
-
   void subscribe_to_back_to_menu_click(std::function<void()> handler);
   void draw(sf::RenderWindow &window) const;
+
+  void run_click_handlers(sf::Vector2i mouse_position);
 };
 
 #endif

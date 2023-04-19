@@ -8,7 +8,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-
 class BoardView {
   const sf::Texture *get_field_texture(Field field);
   sf::Vector2f view_position;
@@ -31,6 +30,7 @@ public:
 
   void subscribe_to_field_click(std::function<void(unsigned long)> handler);
   void run_field_click_handlers(unsigned long field_index);
+  void run_click_handlers(sf::Vector2i mouse_position);
 
   void draw(sf::RenderWindow &window) const;
 };

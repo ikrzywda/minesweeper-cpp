@@ -1,7 +1,6 @@
 #include "include/BoardView.hpp"
 
-BoardView::BoardView(GameState &game_state)
-    : game_state(game_state) {
+BoardView::BoardView(GameState &game_state) : game_state(game_state) {
   this->view_position = view_position;
   this->view_dimensions = view_dimensions;
   this->field_rects =
@@ -71,4 +70,20 @@ void BoardView::run_field_click_handlers(unsigned long field_index) {
   for (auto &handler : this->field_click_handlers) {
     handler(field_index);
   }
+}
+
+void BoardView::run_click_handlers(sf::Vector2i mouse_position) {
+  sf::Vector2f mouse_position_f = sf::Vector2f(mouse_position);
+  if (mouse_position_f.x < this->view_position.x ||
+      mouse_position_f.y < this->view_position.y ||
+      mouse_position_f.x > this->view_position.x + this->view_dimensions.x ||
+      mouse_position_f.y > this->view_position.y + this->view_dimensions.y) {
+    return;
+  }
+
+  unsigned long field_index =
+      (mouse_position_f.x - this->view_position.x) / this->field_dimensions.x +
+      (mouse_position_f.y - this->view_position.y) / this->field_dimensions.y *
+          this->game_state.board_ref->get_width();
+  this->run_field_click_handlers(field_index);
 }

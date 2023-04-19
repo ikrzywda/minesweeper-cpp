@@ -2,9 +2,9 @@
 #define VIEW_CONTROLLER_HPP
 
 #include "BoardView.hpp"
-#include "MenuView.hpp"
-#include "GameOverView.hpp"
 #include "GameControllerSFML.hpp"
+#include "GameOverView.hpp"
+#include "MenuView.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -23,17 +23,11 @@ class ViewController {
   void on_board_update();
   void on_game_start();
 
-  void on_click_game_view(sf::Vector2i mouse_position);
-  void on_click_menu_view(sf::Vector2i mouse_position);
-  void on_click_game_over_view(sf::Vector2i mouse_position);
-
-  void on_click();
-
 public:
   ViewController(sf::RenderWindow &window, GameState &game_state,
                  GameControllerSFML &game_controller_ref);
   void draw();
+  void on_click();
 };
-
 
 #endif

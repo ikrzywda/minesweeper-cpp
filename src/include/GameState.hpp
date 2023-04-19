@@ -6,10 +6,7 @@
 #include <ctime>
 #include <vector>
 
-
 enum GameDifficulty { EASY, NORMAL, HARD };
-
-
 
 struct DifficultySetup {
   int width;
@@ -37,10 +34,7 @@ class GameState {
   void run_callbacks_difficulty_updated() const;
 
 public:
-  GameState(GameDifficulty game_difficulty,
-            std::function<void()> on_game_lost_callback,
-            std::function<void()> on_game_won_callback,
-            std::function<void()> on_board_updated_callback);
+  GameState();
   bool create_new_game();
   std::unique_ptr<Board> board_ref;
   unsigned long get_time_played_seconds() const;

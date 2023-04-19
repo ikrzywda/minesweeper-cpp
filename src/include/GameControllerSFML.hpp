@@ -7,6 +7,7 @@
 
 class GameControllerSFML {
   GameState &game_state;
+
 public:
   GameControllerSFML(GameState &game_state_ref);
   void uncover_field(unsigned long field_index);

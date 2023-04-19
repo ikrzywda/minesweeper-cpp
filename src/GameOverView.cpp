@@ -1,7 +1,7 @@
 #include "include/GameOverView.hpp"
 
-
-GameOverView::GameOverView(sf::Vector2f view_position, sf::Vector2f view_dimensions) {
+GameOverView::GameOverView(sf::Vector2f view_position,
+                           sf::Vector2f view_dimensions) {
   this->back_to_menu_button = std::make_unique<TextButtonView>(
       sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
                    view_position.y + view_dimensions.y / 2 - 100),
@@ -22,7 +22,6 @@ GameOverView::GameOverView(sf::Vector2f view_position, sf::Vector2f view_dimensi
                        this->title.getLocalBounds().width / 2,
                    view_position.y + 50));
 }
-
 
 void GameOverView::run_back_to_menu_click_handlers() {
   for (auto &handler : this->back_to_menu_click_handlers) {
@@ -52,4 +51,9 @@ void GameOverView::draw(sf::RenderWindow &window) const {
   window.draw(*this->back_to_menu_button);
 }
 
-
+void GameOverView::run_click_handlers(sf::Vector2i mouse_position) {
+  if (this->back_to_menu_button->getGlobalBounds().contains(
+          sf::Vector2f(mouse_position))) {
+    this->run_back_to_menu_click_handlers();
+  }
+}

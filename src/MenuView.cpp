@@ -1,6 +1,8 @@
 #include "include/MenuView.hpp"
 
-MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, GameState &game_state) : game_state(game_state) {
+MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
+                   GameState &game_state)
+    : game_state(game_state) {
   this->new_game_button = std::make_unique<TextButtonView>(
       sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
                    view_position.y + view_dimensions.y / 2 - 100),
@@ -10,7 +12,6 @@ MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, Gam
       sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
                    view_position.y + view_dimensions.y / 2 + 100),
       sf::Vector2f(200, 50), "Exit Game");
-
 
   this->set_position(view_position);
   this->set_size(view_dimensions);
@@ -30,7 +31,8 @@ MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, Gam
   this->difficulty_title.setFont(Assets::font_regular);
   this->difficulty_title.setCharacterSize(30);
   this->difficulty_title.setFillColor(sf::Color::White);
-  this->difficulty_title.setString(game_difficulty_names.at(game_state.get_game_difficulty()));
+  this->difficulty_title.setString(
+      game_difficulty_names.at(game_state.get_game_difficulty()));
   this->difficulty_title.setPosition(
       sf::Vector2f(view_position.x + view_dimensions.x / 2 -
                        this->difficulty_title.getLocalBounds().width / 2,
@@ -45,7 +47,6 @@ void MenuView::set_size(sf::Vector2f view_dimensions) {
       sf::Vector2f(view_dimensions.x / 2 - 100, 200));
   this->exit_game_button->setPosition(
       sf::Vector2f(view_dimensions.x / 2 - 100, 300));
-
 }
 
 void MenuView::set_position(sf::Vector2f view_position) {
@@ -87,7 +88,8 @@ void MenuView::run_click_handlers(sf::Vector2i mouse_position) {
     for (int i = 0; i < this->difficulty_buttons.size(); i++) {
       if (this->difficulty_buttons[i].getGlobalBounds().contains(
               sf::Vector2f(mouse_position))) {
-        this->run_difficulty_click_handlers(GameDifficulty(i)); // SHIT -- make it safe
+        this->run_difficulty_click_handlers(
+            GameDifficulty(i)); // SHIT -- make it safe
       }
     }
   }
