@@ -33,6 +33,7 @@ void ViewController::on_game_start() {
   this->game_controller.start_game();
   std::cout << "Starting game" << std::endl;
   this->current_view = Views::BOARD;
+  this->board_view->update();
   this->draw();
 }
 
@@ -68,6 +69,9 @@ ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
   this->board_view->subscribe_to_field_click(
       std::bind(&GameControllerSFML::uncover_field, &game_controller_ref,
                 std::placeholders::_1));
+
+  this->game_over_view->subscribe_to_back_to_menu_click(
+      [this]() { this->current_view = Views::MENU; });
 
   game_state.subscribe_to_board_updated(
       std::bind(&ViewController::on_board_update, this));

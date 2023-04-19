@@ -51,6 +51,17 @@ bool GameState::create_new_game() {
       difficulty_setups.at(this->game_difficulty).mine_count,
       difficulty_setups.at(this->game_difficulty).flag_count);
 
+  for (auto &callback : this->on_game_lost_callbacks) {
+    this->board_ref->subscribe_to_game_lost(callback);
+  }
+  for (auto &callback : this->on_game_won_callbacks) {
+    this->board_ref->subscribe_to_game_won(callback);
+  }
+
+  for (auto &callback : this->on_board_updated_callbacks) {
+    this->board_ref->subscribe_to_board_updated(callback);
+  }
+
   return true;
 }
 
