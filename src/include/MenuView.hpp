@@ -2,29 +2,36 @@
 #define MENU_VIEW_HPP
 
 #include "TextButtonView.hpp"
+#include "GameState.hpp"
 
+#include <map>
 #include <SFML/Graphics.hpp>
 
+static const std::map<GameDifficulty, std::string> game_difficulty_names = {
+    {EASY, "Easy"}, {NORMAL, "Normal"}, {HARD, "Hard"}};
+
 class MenuView {
+  GameState &game_state;
   sf::RectangleShape background;
 
   sf::Text title;
-  TextButtonView new_game_button;
-  TextButtonView exit_game_button;
+  sf::Text difficulty_title;
+  std::unique_ptr<TextButtonView> new_game_button;
+  std::unique_ptr<TextButtonView> exit_game_button;
+
   std::vector<sf::RectangleShape> difficulty_buttons;
 
   std::vector<std::function<void()>> new_game_click_handlers;
   std::vector<std::function<void()>> exit_game_click_handlers;
-  std::vector<std::function<void(unsigned long)>> difficulty_click_handlers;
+  std::vector<std::function<void(GameDifficulty)>> difficulty_click_handlers;
 
   void run_new_game_click_handlers();
   void run_exit_game_click_handlers();
-  void run_difficulty_click_handlers(unsigned long difficulty);
-  void run_click_handlers(sf::Vector2i mouse_position);
+  void run_difficulty_click_handlers(GameDifficulty difficulty);
   void draw(sf::RenderWindow &window) const;
 
 public:
-  MenuView();
+  MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, GameState &game_state);
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);
 
@@ -32,7 +39,9 @@ public:
   void subscribe_to_exit_game_click(std::function<void()> handler);
   void
   subscribe_to_difficulty_click(std::function<void(unsigned long)> handler);
+  void run_click_handlers(sf::Vector2i mouse_position);
 
+  void draw(sf::RenderWindow &window) const;
 };
 
 #endif

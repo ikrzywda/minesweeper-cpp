@@ -3,6 +3,8 @@
 
 #include "BoardView.hpp"
 #include "MenuView.hpp"
+#include "GameOverView.hpp"
+#include "GameControllerSFML.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -10,9 +12,10 @@ enum Views { MENU, BOARD, GAME_OVER };
 
 class ViewController {
   sf::RenderWindow &window;
-  BoardView &board_view;
-  MenuView &menu_view;
-  GameController &game_controller;
+  std::unique_ptr<BoardView> board_view;
+  std::unique_ptr<MenuView> menu_view;
+  std::unique_ptr<GameOverView> game_over_view;
+  GameControllerSFML &game_controller;
   Views current_view;
 
   void on_game_lost();
@@ -28,7 +31,7 @@ class ViewController {
 
 public:
   ViewController(sf::RenderWindow &window, GameState &game_state,
-                 GameController &game_controller_ref);
+                 GameControllerSFML &game_controller_ref);
   void draw();
 };
 

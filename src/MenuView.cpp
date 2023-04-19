@@ -1,8 +1,17 @@
 #include "include/MenuView.hpp"
 
-MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions)
-    : new_game_button(sf::Vector2f(0, 0), sf::Vector2f(0, 0), "New Game"),
-      exit_game_button(sf::Vector2f(0, 0), sf::Vector2f(0, 0), "Exit Game") {
+MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions, GameState &game_state) : game_state(game_state) {
+  this->new_game_button = std::make_unique<TextButtonView>(
+      sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
+                   view_position.y + view_dimensions.y / 2 - 100),
+      sf::Vector2f(200, 50), "New Game");
+
+  this->exit_game_button = std::make_unique<TextButtonView>(
+      sf::Vector2f(view_position.x + view_dimensions.x / 2 - 100,
+                   view_position.y + view_dimensions.y / 2 + 100),
+      sf::Vector2f(200, 50), "Exit Game");
+
+
   this->set_position(view_position);
   this->set_size(view_dimensions);
   this->background.setFillColor(sf::Color(0, 0, 0, 200));
@@ -17,16 +26,26 @@ MenuView::MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions)
       sf::Vector2f(view_position.x + view_dimensions.x / 2 -
                        this->title.getLocalBounds().width / 2,
                    view_position.y + 50));
+
+  this->difficulty_title.setFont(Assets::font_regular);
+  this->difficulty_title.setCharacterSize(30);
+  this->difficulty_title.setFillColor(sf::Color::White);
+  this->difficulty_title.setString(game_difficulty_names.at(game_state.get_game_difficulty()));
+  this->difficulty_title.setPosition(
+      sf::Vector2f(view_position.x + view_dimensions.x / 2 -
+                       this->difficulty_title.getLocalBounds().width / 2,
+                   view_position.y + 150));
 }
 
 void MenuView::set_size(sf::Vector2f view_dimensions) {
   this->background.setSize(view_dimensions);
-  this->new_game_button.setSize(sf::Vector2f(200, 50));
-  this->exit_game_button.setSize(sf::Vector2f(200, 50));
-  this->new_game_button.setPosition(
+  this->new_game_button->setSize(sf::Vector2f(200, 50));
+  this->exit_game_button->setSize(sf::Vector2f(200, 50));
+  this->new_game_button->setPosition(
       sf::Vector2f(view_dimensions.x / 2 - 100, 200));
-  this->exit_game_button.setPosition(
+  this->exit_game_button->setPosition(
       sf::Vector2f(view_dimensions.x / 2 - 100, 300));
+
 }
 
 void MenuView::set_position(sf::Vector2f view_position) {
@@ -45,7 +64,7 @@ void MenuView::run_exit_game_click_handlers() {
   }
 }
 
-void MenuView::run_difficulty_click_handlers(unsigned long difficulty) {
+void MenuView::run_difficulty_click_handlers(GameDifficulty difficulty) {
   for (auto &handler : this->difficulty_click_handlers) {
     handler(difficulty);
   }
@@ -58,17 +77,17 @@ void MenuView::run_new_game_click_handlers() {
 }
 
 void MenuView::run_click_handlers(sf::Vector2i mouse_position) {
-  if (this->new_game_button.getGlobalBounds().contains(
+  if (this->new_game_button->getGlobalBounds().contains(
           sf::Vector2f(mouse_position))) {
     this->run_new_game_click_handlers();
-  } else if (this->exit_game_button.getGlobalBounds().contains(
+  } else if (this->exit_game_button->getGlobalBounds().contains(
                  sf::Vector2f(mouse_position))) {
     this->run_exit_game_click_handlers();
   } else {
     for (int i = 0; i < this->difficulty_buttons.size(); i++) {
       if (this->difficulty_buttons[i].getGlobalBounds().contains(
               sf::Vector2f(mouse_position))) {
-        this->run_difficulty_click_handlers(i);
+        this->run_difficulty_click_handlers(GameDifficulty(i)); // SHIT -- make it safe
       }
     }
   }
@@ -98,8 +117,9 @@ void MenuView::subscribe_to_difficulty_click(
 void MenuView::draw(sf::RenderWindow &window) const {
   window.draw(this->background);
   window.draw(this->title);
-  window.draw(this->new_game_button);
-  window.draw(this->exit_game_button);
+
+  window.draw(*this->new_game_button);
+  window.draw(*this->exit_game_button);
   for (auto &button : this->difficulty_buttons) {
     window.draw(button);
   }

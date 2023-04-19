@@ -18,7 +18,6 @@ class BoardView {
 
   std::vector<std::function<void(unsigned long)>> field_click_handlers;
 
-  int get_field_size();
   GameState &game_state;
 
 public:

@@ -19,6 +19,12 @@ void GameState::run_callbacks_game_lost() const {
   }
 }
 
+void GameState::run_callbacks_difficulty_updated() const {
+  for (auto &callback : this->on_difficulty_updated_callbacks) {
+    callback();
+  }
+}
+
 GameState::GameState(GameDifficulty game_difficulty,
                      std::function<void()> on_game_lost_callback,
                      std::function<void()> on_game_won_callback,
@@ -40,18 +46,17 @@ GameState::GameState(GameDifficulty game_difficulty,
   this->subscribe_to_game_won(on_game_won_callback);
 }
 
-bool GameState::create_new_game(GameDifficulty game_difficulty) {
-  this->game_difficulty = game_difficulty;
+bool GameState::create_new_game() {
   this->flags_remaining = 0;
   this->session_start_time = time(nullptr);
   this->time_limit_seconds =
-      difficulty_setups.at(game_difficulty).time_limit_seconds;
+      difficulty_setups.at(this->game_difficulty).time_limit_seconds;
 
   this->board_ref =
-      std::make_unique<Board>(difficulty_setups.at(game_difficulty).width,
-                              difficulty_setups.at(game_difficulty).height,
-                              difficulty_setups.at(game_difficulty).mine_count,
-                              difficulty_setups.at(game_difficulty).flag_count);
+      std::make_unique<Board>(difficulty_setups.at(this->game_difficulty).width,
+                              difficulty_setups.at(this->game_difficulty).height,
+                              difficulty_setups.at(this->game_difficulty).mine_count,
+                              difficulty_setups.at(this->game_difficulty).flag_count);
 
   return true;
 }

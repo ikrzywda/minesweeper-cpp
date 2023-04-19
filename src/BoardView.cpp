@@ -24,11 +24,6 @@ const sf::Texture *BoardView::get_field_texture(Field field) {
   return &Assets::tile_textures[field.mine_count];
 }
 
-int BoardView::get_field_size() {
-  int board_width = this->game_state.board_ref->get_width();
-  int board_height = this->game_state.board_ref->get_height();
-}
-
 void BoardView::set_size(sf::Vector2f view_dimensions) {
   this->view_dimensions = view_dimensions;
   this->field_dimensions = sf::Vector2f(
