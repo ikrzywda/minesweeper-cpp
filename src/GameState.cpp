@@ -6,6 +6,7 @@ void GameState::subscribe_to_game_lost(std::function<void()> callback) {
 }
 
 void GameState::subscribe_to_game_won(std::function<void()> callback) {
+  this->on_game_won_callbacks.push_back(callback);
   this->board_ref->subscribe_to_game_won(callback);
 }
 
@@ -45,11 +46,13 @@ bool GameState::create_new_game() {
   this->time_limit_seconds =
       difficulty_setups.at(this->game_difficulty).time_limit_seconds;
 
-  this->board_ref = std::make_unique<Board>(
-      difficulty_setups.at(this->game_difficulty).width,
-      difficulty_setups.at(this->game_difficulty).height,
-      difficulty_setups.at(this->game_difficulty).mine_count,
-      difficulty_setups.at(this->game_difficulty).flag_count);
+  this->board_ref = std::make_unique<Board>(10, 10);
+
+  // this->board_ref = std::make_unique<Board>(
+  //     difficulty_setups.at(this->game_difficulty).width,
+  //     difficulty_setups.at(this->game_difficulty).height,
+  //     difficulty_setups.at(this->game_difficulty).mine_count,
+  //     difficulty_setups.at(this->game_difficulty).flag_count);
 
   for (auto &callback : this->on_game_lost_callbacks) {
     this->board_ref->subscribe_to_game_lost(callback);
