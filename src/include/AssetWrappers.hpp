@@ -38,7 +38,7 @@ struct Assets {
     mine_texture.loadFromFile(get_assets_path("tiles/TileMine.png"));
     exploded_texture.loadFromFile(get_assets_path("tiles/TileExploded.png"));
     covered.loadFromFile(get_assets_path("tiles/TileUnknown.png"));
-    font_regular.loadFromFile(get_assets_path("fonts/Ubuntu-Regular.ttf"));
+    font_regular.loadFromFile(get_assets_path("fonts/Ubuntu-Medium.ttf"));
     font_bold.loadFromFile(get_assets_path("fonts/Ubuntu-Bold.ttf"));
     font_light.loadFromFile(get_assets_path("fonts/Ubuntu-Light.ttf"));
   }
