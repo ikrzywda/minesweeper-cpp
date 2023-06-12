@@ -52,16 +52,21 @@ void BoardView::update() {
         std::vector<sf::RectangleShape>(board_width * board_height);
   }
 
-  this->field_dimensions = sf::Vector2f(view_dimensions.x / board_width,
-                                        view_dimensions.y / board_height);
+  float max_width = this->view_dimensions.x * 0.8;
+  float max_height = this->view_dimensions.y * 0.8;
+  float horizontal_offset = this->view_dimensions.x * 0.1;
+  float vertical_offset = this->view_dimensions.y * 0.2;
+
+  this->field_dimensions =
+      sf::Vector2f(max_width / board_width, max_height / board_height);
 
   std::vector<Field> game_board = this->game_state.board_ref->get_board();
 
   for (unsigned long i = 0; i < this->field_rects.size(); i++) {
     this->field_rects[i].setSize(this->field_dimensions);
-    this->field_rects[i].setPosition(
-        sf::Vector2f((i % board_width) * this->field_dimensions.x,
-                     (i / board_width) * this->field_dimensions.y));
+    this->field_rects[i].setPosition(sf::Vector2f(
+        (i % board_width) * this->field_dimensions.x + horizontal_offset,
+        (i / board_width) * this->field_dimensions.y + vertical_offset));
     this->field_rects[i].setTexture(this->get_field_texture(game_board[i]));
   }
 }

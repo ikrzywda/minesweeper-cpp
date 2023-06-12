@@ -1,11 +1,11 @@
 #ifndef BOARD_DISPLAY_HPP
 #define BOARD_DISPLAY_HPP
 
-#include "Board.hpp"
-#include "TextViewController.hpp"
-
 #include <iostream>
 #include <map>
+
+#include "Board.hpp"
+#include "TextViewController.hpp"
 
 // class TextView {
 //   Board &board;

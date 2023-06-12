@@ -1,13 +1,13 @@
 #ifndef VIEW_CONTROLLER_HPP
 #define VIEW_CONTROLLER_HPP
 
+#include <SFML/Graphics.hpp>
+
 #include "BoardView.hpp"
 #include "GameControllerSFML.hpp"
 #include "GameOverView.hpp"
 #include "GameState.hpp"
 #include "MenuView.hpp"
-
-#include <SFML/Graphics.hpp>
 
 enum Views { MENU, BOARD, WON, LOST };
 
@@ -24,7 +24,7 @@ class ViewController {
   void on_board_update();
   void on_game_start();
 
-public:
+ public:
   ViewController(sf::RenderWindow &window, GameState &game_state,
                  GameControllerSFML &game_controller_ref);
   void draw();

@@ -2,18 +2,18 @@
 
 void ViewController::draw() {
   switch (this->current_view) {
-  case Views::BOARD:
-    this->board_view->draw(this->window);
-    break;
-  case Views::WON:
-    this->game_over_view->draw(this->window, true);
-    break;
-  case Views::LOST:
-    this->game_over_view->draw(this->window, false);
-    break;
-  case Views::MENU:
-    this->menu_view->draw(this->window);
-    break;
+    case Views::BOARD:
+      this->board_view->draw(this->window);
+      break;
+    case Views::WON:
+      this->game_over_view->draw(this->window, true);
+      break;
+    case Views::LOST:
+      this->game_over_view->draw(this->window, false);
+      break;
+    case Views::MENU:
+      this->menu_view->draw(this->window);
+      break;
   }
 }
 
@@ -43,16 +43,16 @@ void ViewController::on_game_start() {
 void ViewController::on_click() {
   sf::Vector2i mouse_position = sf::Mouse::getPosition(this->window);
   switch (this->current_view) {
-  case Views::BOARD:
-    this->board_view->run_click_handlers(mouse_position);
-    break;
-  case Views::LOST:
-  case Views::WON:
-    this->game_over_view->run_click_handlers(mouse_position);
-    break;
-  case Views::MENU:
-    this->menu_view->run_click_handlers(mouse_position);
-    break;
+    case Views::BOARD:
+      this->board_view->run_click_handlers(mouse_position);
+      break;
+    case Views::LOST:
+    case Views::WON:
+      this->game_over_view->run_click_handlers(mouse_position);
+      break;
+    case Views::MENU:
+      this->menu_view->run_click_handlers(mouse_position);
+      break;
   }
 }
 

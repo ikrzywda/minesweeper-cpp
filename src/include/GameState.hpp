@@ -1,10 +1,10 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
-#include "Board.hpp"
-
 #include <ctime>
 #include <vector>
+
+#include "Board.hpp"
 
 enum GameDifficulty { EASY, NORMAL, HARD };
 
@@ -17,7 +17,7 @@ struct DifficultySetup {
 };
 
 static const std::vector<DifficultySetup> difficulty_setups = {
-    {9, 9, 10, 10, 300}, {16, 16, 40, 40, 300}, {30, 30, 99, 99, 300}};
+    {9, 9, 10, 10, 300}, {16, 16, 40, 40, 300}, {30, 30, 250, 99, 300}};
 
 class GameState {
   time_t session_start_time;
@@ -33,7 +33,7 @@ class GameState {
   void run_callbacks_game_lost() const;
   void run_callbacks_difficulty_updated() const;
 
-public:
+ public:
   GameState();
   bool create_new_game();
   std::unique_ptr<Board> board_ref;
@@ -47,4 +47,4 @@ public:
   void subscribe_to_difficulty_updated(std::function<void()> callback);
 };
 
-#endif // GAME_STATE_HPP
+#endif  // GAME_STATE_HPP

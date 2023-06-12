@@ -4,7 +4,8 @@
 #include <stdexcept>
 #include <vector>
 
-template <typename T> struct FillData {
+template <typename T>
+struct FillData {
   std::vector<T> &board;
   std::function<bool(T &)> mutating_predicate;
   int width, height;
@@ -12,7 +13,6 @@ template <typename T> struct FillData {
 
 template <typename T>
 bool is_field_valid(unsigned long index, const FillData<T> &data) {
-
   if (index >= data.board.size() || index < 0) {
     return false;
   }
@@ -41,7 +41,6 @@ template <typename T>
 void flood_fill(std::vector<T> &board, int width, int height,
                 std::function<bool(T &)> mutating_predicate,
                 unsigned long start_index) {
-
   FillData<T> fill_data = {
       board,
       mutating_predicate,

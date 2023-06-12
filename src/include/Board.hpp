@@ -1,13 +1,13 @@
 #ifndef MINESWEEPER_HPP
 #define MINESWEEPER_HPP
 
-#include "Field.hpp"
-#include "flood_fill.hpp"
-
 #include <iomanip>
 #include <iostream>
 #include <numeric>
 #include <vector>
+
+#include "Field.hpp"
+#include "flood_fill.hpp"
 class Board {
   int width;
   int height;
@@ -32,7 +32,7 @@ class Board {
   void run_callbacks_game_won();
   void run_callbacks_board_updated();
 
-public:
+ public:
   explicit Board(int width, int height, int mine_count, int flag_count);
   Board(int width, int height);
   unsigned long compute_field_index(int row, int col) const;

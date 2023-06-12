@@ -7,7 +7,6 @@ unsigned long Board::compute_field_index(int row, int col) const {
 int Board::get_adjacent_field_indices(
     unsigned long field_index,
     std::vector<unsigned long> &adjacent_indices) const {
-
   unsigned long current_row = field_index / this->width;
   if (field_index < 0 || field_index > this->board.size()) {
     return 0;
@@ -42,7 +41,10 @@ void Board::populate_board_debug() {
 
 void Board::populate_board(int mine_count) {
   int field_index;
-  mine_count = this->board.size() / mine_count;
+  if (mine_count > this->board.size()) {
+    mine_count = this->board.size();
+  }
+  // mine_count = this->board.size() / mine_count;
 
   for (int i = 0; i < mine_count;) {
     field_index = rand() % this->board.size();
@@ -126,7 +128,6 @@ void Board::debug_display() const {
   }
 
   for (auto field : this->board) {
-
     current_field_str = field.get_debug_str();
 
     if (!(col % this->width)) {
@@ -152,7 +153,6 @@ int Board::get_width() const { return this->width; }
 int Board::get_height() const { return this->height; }
 
 int Board::count_mines(unsigned long field_index) const {
-
   std::vector<unsigned long> adjacent_indices(8);
 
   if (!this->get_adjacent_field_indices(field_index, adjacent_indices)) {
@@ -189,7 +189,6 @@ void Board::evaluate_score() {
 }
 
 bool Board::has_flag(unsigned long field_index) const {
-
   if (field_index < 0 || field_index > this->board.size()) {
     return false;
   }

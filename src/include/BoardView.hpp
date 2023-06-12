@@ -1,11 +1,11 @@
 #ifndef BOARD_VIEW_HPP
 #define BOARD_VIEW_HPP
 
-#include "AssetWrappers.hpp"
-#include "GameState.hpp"
-
 #include <SFML/Graphics.hpp>
 #include <vector>
+
+#include "AssetWrappers.hpp"
+#include "GameState.hpp"
 
 class BoardView {
   const sf::Texture *get_field_texture(Field field);
@@ -18,7 +18,7 @@ class BoardView {
 
   GameState &game_state;
 
-public:
+ public:
   void update();
   BoardView(GameState &game_state, sf::Vector2f view_position,
             sf::Vector2f view_dimensions);

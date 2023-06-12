@@ -1,11 +1,11 @@
 #ifndef MENU_VIEW_HPP
 #define MENU_VIEW_HPP
 
-#include "GameState.hpp"
-#include "TextButtonView.hpp"
-
 #include <SFML/Graphics.hpp>
 #include <map>
+
+#include "GameState.hpp"
+#include "TextButtonView.hpp"
 
 static const std::map<GameDifficulty, std::string> game_difficulty_names = {
     {EASY, "Easy"}, {NORMAL, "Normal"}, {HARD, "Hard"}};
@@ -33,7 +33,7 @@ class MenuView {
   void run_exit_game_click_handlers();
   void run_difficulty_click_handlers(GameDifficulty difficulty);
 
-public:
+ public:
   MenuView(sf::Vector2f view_position, sf::Vector2f view_dimensions,
            GameState &game_state);
   void set_size(sf::Vector2f view_dimensions);
@@ -41,8 +41,8 @@ public:
 
   void subscribe_to_new_game_click(std::function<void()> handler);
   void subscribe_to_exit_game_click(std::function<void()> handler);
-  void
-  subscribe_to_difficulty_click(std::function<void(GameDifficulty)> handler);
+  void subscribe_to_difficulty_click(
+      std::function<void(GameDifficulty)> handler);
   void run_click_handlers(sf::Vector2i mouse_position);
 
   void draw(sf::RenderWindow &window) const;

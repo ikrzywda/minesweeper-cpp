@@ -1,8 +1,9 @@
 #ifndef GAME_OVER_VIEW_HPP
 #define GAME_OVER_VIEW_HPP
 
-#include "TextButtonView.hpp"
 #include <SFML/Graphics.hpp>
+
+#include "TextButtonView.hpp"
 
 class GameOverView {
   sf::RectangleShape background;
@@ -15,7 +16,7 @@ class GameOverView {
   std::vector<std::function<void()>> back_to_menu_click_handlers;
   void run_back_to_menu_click_handlers();
 
-public:
+ public:
   GameOverView(sf::Vector2f view_position, sf::Vector2f view_dimensions);
   void set_size(sf::Vector2f view_dimensions);
   void set_position(sf::Vector2f view_position);

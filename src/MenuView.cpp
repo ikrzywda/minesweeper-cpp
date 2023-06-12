@@ -81,7 +81,6 @@ void MenuView::run_exit_game_click_handlers() {
 }
 
 void MenuView::run_difficulty_click_handlers(GameDifficulty difficulty) {
-
   for (auto &handler : this->difficulty_click_handlers) {
     handler(difficulty);
   }
