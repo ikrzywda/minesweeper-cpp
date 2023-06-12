@@ -47,6 +47,8 @@ class Board {
   int get_width() const;
   int get_height() const;
 
+  int get_flag_count() const;
+
   int count_mines(unsigned long field_index) const;
   bool has_flag(unsigned long field_index) const;
   void toggle_flag(unsigned long field_index);

@@ -152,6 +152,8 @@ int Board::set_field(int x, int y, Field value) {
 int Board::get_width() const { return this->width; }
 int Board::get_height() const { return this->height; }
 
+int Board::get_flag_count() const { return this->flag_count; }
+
 int Board::count_mines(unsigned long field_index) const {
   std::vector<unsigned long> adjacent_indices(8);
 

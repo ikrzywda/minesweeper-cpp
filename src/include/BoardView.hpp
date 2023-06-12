@@ -12,6 +12,7 @@ class BoardView {
   sf::Vector2f view_position;
   sf::Vector2f view_dimensions;
   sf::Vector2f field_dimensions;
+  sf::Text flag_count_text;
   std::vector<sf::RectangleShape> field_rects;
 
   std::vector<std::function<void(unsigned long)>> field_click_handlers;

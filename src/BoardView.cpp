@@ -57,6 +57,13 @@ void BoardView::update() {
   float horizontal_offset = this->view_dimensions.x * 0.1;
   float vertical_offset = this->view_dimensions.y * 0.2;
 
+  this->flag_count_text.setFont(Assets::font_bold);
+  this->flag_count_text.setCharacterSize(15);
+  this->flag_count_text.setFillColor(sf::Color::White);
+  this->flag_count_text.setPosition(sf::Vector2f(horizontal_offset, 0));
+  this->flag_count_text.setString(
+      "Flags: " + std::to_string(this->game_state.board_ref->get_flag_count()));
+
   this->field_dimensions =
       sf::Vector2f(max_width / board_width, max_height / board_height);
 
@@ -81,6 +88,7 @@ void BoardView::draw(sf::RenderWindow &window) const {
   for (auto &rect : this->field_rects) {
     window.draw(rect);
   }
+  window.draw(this->flag_count_text);
 }
 
 void BoardView::subscribe_to_field_click(
