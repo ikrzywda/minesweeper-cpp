@@ -16,6 +16,7 @@ class BoardView {
   std::vector<sf::RectangleShape> field_rects;
 
   std::vector<std::function<void(unsigned long)>> field_click_handlers;
+  std::vector<std::function<void(unsigned long)>> right_click_handlers;
 
   GameState &game_state;
 
@@ -30,8 +31,12 @@ class BoardView {
   sf::Vector2f get_field_dimensions() const;
 
   void subscribe_to_field_click(std::function<void(unsigned long)> handler);
-  void run_field_click_handlers(unsigned long field_index);
-  void run_click_handlers(sf::Vector2i mouse_position);
+  void subscribe_to_right_field_click(
+      std::function<void(unsigned long)> handler);
+  void run_field_click_handlers(unsigned long field_index,
+                                sf::Mouse::Button button);
+  void run_click_handlers(sf::Vector2i mouse_position,
+                          sf::Mouse::Button button);
 
   void draw(sf::RenderWindow &window) const;
 };

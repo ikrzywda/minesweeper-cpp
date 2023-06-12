@@ -28,7 +28,7 @@ class ViewController {
   ViewController(sf::RenderWindow &window, GameState &game_state,
                  GameControllerSFML &game_controller_ref);
   void draw();
-  void on_click();
+  void on_click(sf::Mouse::Button button);
 };
 
 #endif

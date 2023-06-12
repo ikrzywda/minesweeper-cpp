@@ -96,13 +96,22 @@ void BoardView::subscribe_to_field_click(
   this->field_click_handlers.push_back(handler);
 }
 
-void BoardView::run_field_click_handlers(unsigned long field_index) {
-  for (auto &handler : this->field_click_handlers) {
+void BoardView::subscribe_to_right_field_click(
+    std::function<void(unsigned long)> handler) {
+  this->right_click_handlers.push_back(handler);
+}
+
+void BoardView::run_field_click_handlers(unsigned long field_index,
+                                         sf::Mouse::Button button) {
+  auto handlers = button == sf::Mouse::Left ? this->field_click_handlers
+                                            : this->right_click_handlers;
+  for (auto &handler : handlers) {
     handler(field_index);
   }
 }
 
-void BoardView::run_click_handlers(sf::Vector2i mouse_position) {
+void BoardView::run_click_handlers(sf::Vector2i mouse_position,
+                                   sf::Mouse::Button button) {
   sf::Vector2f mouse_position_f = sf::Vector2f(mouse_position);
   if (mouse_position_f.x < this->view_position.x ||
       mouse_position_f.y < this->view_position.y ||
@@ -113,7 +122,7 @@ void BoardView::run_click_handlers(sf::Vector2i mouse_position) {
 
   for (size_t i = 0; i < this->field_rects.size(); i++) {
     if (this->field_rects[i].getGlobalBounds().contains(mouse_position_f)) {
-      this->run_field_click_handlers(i);
+      this->run_field_click_handlers(i, button);
       this->update();
       break;
     }

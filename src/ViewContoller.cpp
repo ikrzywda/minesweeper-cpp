@@ -40,11 +40,11 @@ void ViewController::on_game_start() {
 }
 
 // Case for inheritance -- to refactor
-void ViewController::on_click() {
+void ViewController::on_click(sf::Mouse::Button button) {
   sf::Vector2i mouse_position = sf::Mouse::getPosition(this->window);
   switch (this->current_view) {
     case Views::BOARD:
-      this->board_view->run_click_handlers(mouse_position);
+      this->board_view->run_click_handlers(mouse_position, button);
       break;
     case Views::LOST:
     case Views::WON:
@@ -71,6 +71,10 @@ ViewController::ViewController(sf::RenderWindow &window, GameState &game_state,
 
   this->board_view->subscribe_to_field_click(
       std::bind(&GameControllerSFML::uncover_field, &game_controller_ref,
+                std::placeholders::_1));
+
+  this->board_view->subscribe_to_right_field_click(
+      std::bind(&GameControllerSFML::toggle_flag, &game_controller_ref,
                 std::placeholders::_1));
 
   this->game_over_view->subscribe_to_back_to_menu_click(

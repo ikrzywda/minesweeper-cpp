@@ -21,7 +21,7 @@ int main() {
       if (event.type == sf::Event::Closed)
         window.close();
       if (event.type == sf::Event::MouseButtonPressed) {
-        view_controller.on_click();
+        view_controller.on_click(event.mouseButton.button);
       }
     }
 
