@@ -1,6 +1,7 @@
 #ifndef FLOOD_FILL_HPP
 #define FLOOD_FILL_HPP
 
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -48,12 +49,14 @@ void flood_fill(std::vector<T> &board, int width, int height,
       height,
   };
 
-  std::vector<unsigned long> check_stack(128);
-  std::vector<unsigned long> adjacent_indices(4);
+  std::vector<unsigned long> check_stack;
+  std::vector<unsigned long> adjacent_indices;
+  check_stack.reserve(board.size());
+  adjacent_indices.reserve(4);
 
   unsigned long current_index;
 
-  if (board.size() < start_index) {
+  if (board.size() <= start_index) {
     return;
   }
 
